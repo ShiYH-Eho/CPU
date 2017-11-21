@@ -56,10 +56,11 @@ begin
 			when "0101" => --  SRA
 				tmp := Asrc(15 downto 0);
 				if (Bsrc = "0000000000000000") then 
-					ALUresult(15 downto 0) <= to_stdlogicvector(to_bitvector(tmp) sra 8);--left 8
+					ALUresult(15 downto 0) <= to_stdlogicvector(to_bitvector(tmp) sra 8);--right 8
 				else 
 					ALUresult <= to_stdlogicvector(to_bitvector(Asrc) sra conv_integer(Bsrc));
 				end if;
+				branchJudge <= '1';
 			when "0111" => --NOT
 				ALUresult <= not Asrc;
 				branchJudge <= "1";
@@ -77,7 +78,7 @@ begin
 					ALUresult <= "0000000000000001";
 				end if;
 				branchJudge <= '1';
-			when "1000" => --for SLT
+			when "1000" => --for SLT SLTI
 				if (Asrc < Bsrc) then
 					ALUresult <= "0000000000000001";
 				else 
