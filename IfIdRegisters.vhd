@@ -65,7 +65,7 @@ begin
 	PCOut <= tmpPC;
 	process(rst, clk, commandIn, PCIn)
 	begin 
-		if (rst = '0') then
+		if (rst = '1') then
 			tmpRx <= (others => '0');
 			tmpRy <= (others => '0');
 			tmpRz <= (others => '0');
