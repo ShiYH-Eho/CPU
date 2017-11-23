@@ -407,7 +407,8 @@ architecture Behavioral of cpu is
 	
 	--controller
 	signal immChoose : std_logic_vector(2 downto 0);
-	signal controllerOut : std_logic_vector(20 downto 0);
+	signal choose_data : std_logic;
+	signal controllerOut : std_logic_vector(19 downto 0);
 	
 	--Registers
 	signal dataA1, dataB1, dataT1, dataSP1, dataIH1 : std_logic_vector(15 downto 0);
@@ -504,7 +505,7 @@ begin
 			ry => ry1,
 			rz => rz1,
 			
-			rdChoose => controllerOut(17 downto 15),
+			rdChoose => controllerOut(10 downto 8),
 			
 			rdOut => rdMuxOut
 		);
@@ -512,10 +513,8 @@ begin
 	u5 : Controller
 	port map(	commandIn => IfIdCommand,
 			rst => rst,
-			imm => immChoose,
-			controllerOut => controllerOut
-			-- RegWrite(1)	SpeReg(2) RegDst(3) Asrc(3) Bsrc(2) ALUOP(4) 
-			-- MemRead(1) MemWrite(1) MemToReg(1)  branch(1) jump(1) dataSrc(1)
+			controllerOut => controllerOut,
+			choose_data =>choose_data
 		);
 		
 	u6 : Registers
@@ -554,8 +553,8 @@ begin
 			rdIn => rdMuxOut,
 			rxIn => rx1,
 			ryIn => ry1,
-			ASrcIn => controllerOut(14 downto 12),
-			BSrcIn => controllerOut (11 downto 10),
+			ASrcIn => controllerOut(15 downto 13),
+			BSrcIn => controllerOut (12 downto 11),
 			
 			dataAIn => dataA1,
 			dataBIn => dataB1,
@@ -566,14 +565,14 @@ begin
 			
 			WriteKeep => WriteKeep,
 			
-			WBIn => controllerOut(20),
-			memWriteIn => controllerOut(4),
-			memReadIn => controllerOut(5),
-			memToRegIn => controllerOut(3),
-			branchIn => controllerOut(2),
-			jumpIn => controllerOut(1),
-			ALUOpIn => controllerOut(9 downto 6),
-			dataSrcIn => controllerOut(0),
+			WBIn => controllerOut(5),
+			memWriteIn => controllerOut(3),
+			memReadIn => controllerOut(4),
+			memToRegIn => controllerOut(2),
+			branchIn => controllerOut(1),
+			jumpIn => controllerOut(0),
+			ALUOpIn => controllerOut(19 downto 16),
+			dataSrcIn => choose_data,
 		
 			PCOut => IdExPC,
 			rdOut => IdExRd,
@@ -726,8 +725,8 @@ begin
 			
 			IfIdRx => rx1,
 			IfIdRy => ry1,
-			IfIdASrc => controllerOut(14 downto 12),
-			IfIdBSrc => controllerOut(11 downto 10),
+			IfIdASrc => controllerOut(15 downto 13),
+			IfIdBSrc => controllerOut(12 downto 11),
 			
 			PCKeep => PCKeep,
 			IfIdKeep => IfIdKeep,
