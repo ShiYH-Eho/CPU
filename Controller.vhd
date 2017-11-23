@@ -12,7 +12,8 @@ entity Controller is
         choose_Dst : out std_logic_vector (2 downto 0) := "000";
         special_Reg : out std_logic_vector(1 downto 0) := "00"
         RegWrite , MemRead , MemWrite  ,MemtoReg : out std_logic := "0";
-        branch , jump : out std_logic := "0"
+        branch , jump : out std_logic := "0";
+        choose_data : out std_logic := "0"
     );
 end Controller;
 
@@ -114,6 +115,11 @@ begin
                     ControllerOut <= "10000011111000100000";
                 when others => --error
             end case ;
+            if (commandIn(15 downto 11) = "11011") then
+                choose_data <= "1";
+            else
+                choose_data <= "0";
+            end if ;
         end if;
     end process;
 end Behavioral;
