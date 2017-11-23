@@ -6,30 +6,21 @@ entity Controller is
         commandIn : in std_logic_vector (15 downto 0);
         rst : in std_logic;
         ControllerOut : out std_logic_vector(19 downto 0) := x"00000";
-        ALUOP : out std_logic_vector(3 downto 0) := "0000";
-        choose_A : out std_logic_vector(2 downto 0) := "000"
-        choose_B : out std_logic_vector(1 downto 0) := "00";
-        choose_Dst : out std_logic_vector (2 downto 0) := "000";
-        special_Reg : out std_logic_vector(1 downto 0) := "00"
-        RegWrite , MemRead , MemWrite  ,MemtoReg : out std_logic := "0";
-        branch , jump : out std_logic := "0";
+
+--        ALUOP : out std_logic_vector(3 downto 0) := "0000";
+--        choose_A : out std_logic_vector(2 downto 0) := "000"
+--        choose_B : out std_logic_vector(1 downto 0) := "00";
+--        choose_Dst : out std_logic_vector (2 downto 0) := "000";
+--        special_Reg : out std_logic_vector(1 downto 0) := "00"
+--        RegWrite , MemRead , MemWrite  ,MemtoReg : out std_logic := "0";
+--        branch , jump : out std_logic := "0";
+
         choose_data : out std_logic := "0"
     );
 end Controller;
 
 architecture Behavioral of Controller is
 begin
-    ALUOP <= ControllerOut(19 downto 16);
-    choose_A <= ControllerOut(15 downto 13);
-    choose_B <= ControllerOut(12 downto 11);
-    choose_Dst <= ControllerOut(10 downto 8);
-    special_Reg <= ControllerOut(7 downto 6);
-    RegWrite <= ControllerOut(5);
-    MemRead <= ControllerOut(4);
-    MemWrite <= ControllerOut(3);
-    MemtoReg <= ControllerOut(2);
-    branch <= ControllerOut(1);
-    jump <= ControllerOut(0);
     process(commandIn,rst)
     begin
         if (rst = "1") then
