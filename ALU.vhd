@@ -29,13 +29,6 @@ begin
 				else 
 					branchJudge <= '0';
 				end if;
-			when "1010" => -- cmp
-				if (Asrc = Bsrc) then 
-					ALUresult <= "0000000000000000";
-				else 
-					ALUresult <= "0000000000000001";
-				end if;
-				branchJudge <= '1';
 			when "0010" => --  AND
 				ALUresult <= Asrc and Bsrc;
 				branchJudge <= '1';
@@ -63,7 +56,7 @@ begin
 				branchJudge <= '1';
 			when "0111" => --NOT
 				ALUresult <= not Asrc;
-				branchJudge <= "1";
+				branchJudge <= '1';
 			when "1001" => --special sub for BNEZ
 				ALUresult  <= Asrc - Bsrc; 
 				if (Asrc = Bsrc) then
@@ -73,9 +66,9 @@ begin
 				end if;
 			when "1010" => -- special for CMP
 				if (Asrc = Bsrc) then
-					ALUresult <= (others => '0');
+					ALUresult <= x"0000";
 				else 
-					ALUresult <= "0000000000000001";
+					ALUresult <= x"0001";
 				end if;
 				branchJudge <= '1';
 			when "1000" => --for SLT SLTI
@@ -85,6 +78,7 @@ begin
 					ALUresult <= (others => '0');
 				end if;
 				branchJudge <= '1';
+			when others =>
 		end case;
 	end process;
 
