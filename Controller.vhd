@@ -152,7 +152,7 @@ begin
                     choose_imm <= "110";
                 when others => --error
             end case ;
-            if (commandIn(15 downto 11) = "11011" or commandIn(15 downto 11) = "11010") then
+            if (commandIn(15 downto 11) = "11011") then
                 choose_data <= '1';
             else
                 choose_data <= '0';

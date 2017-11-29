@@ -4,7 +4,7 @@ entity ExMemRegisters is
 	port(
 			clk : in std_logic;
 			rst : in std_logic;
-			
+
 			dataAIn : in std_logic_vector(15 downto 0);
 			dataBIn : in std_logic_vector(15 downto 0);
 			rdIn : in std_logic_vector(3 downto 0);
@@ -12,6 +12,7 @@ entity ExMemRegisters is
 			ansIn : in std_logic_vector(15 downto 0);
 			branchIn : in std_logic;
 			branchJudgeIn : in std_logic;
+			jumpIn : in std_logic;
 			
 			WBIn : in std_logic;
 			memReadIn : in std_logic;
@@ -25,6 +26,7 @@ entity ExMemRegisters is
 			ansOut : out std_logic_vector(15 downto 0);
 			branchOut : out std_logic;
 			branchJudgeOut : out std_logic;
+			jumpOut : out std_logic;
 			
 			WBOut : out std_logic;
 			memReadOut : out std_logic;
@@ -56,6 +58,7 @@ begin
 			ansOut <= ansIn;
 			branchOut <= branchIn;
 			branchJudgeOut <= branchJudgeIn;
+			jumpOut <= jumpIn;
 			WBOut <= WBIn;
 			memReadOut <= memReadIn;
 			memWriteOut <= memWriteIn;
