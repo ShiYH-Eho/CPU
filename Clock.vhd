@@ -3,6 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Clock is
 	port(
+		rst : in std_logic;
 		clkIn : in std_logic;
 		clk_8 : out std_logic;
 		clk_15 : out std_logic
@@ -15,7 +16,10 @@ architecture Behavioral of Clock is
 begin
 	process (clkIn)
 		begin
-			if (clkIn'event and clkIn='1') then 
+			if (rst = '0') then
+			 cnt15 <= 0;
+			 cnt4 <= 0;
+			elsif (clkIn'event and clkIn='1') then 
 				clk_1<=not clk_1; 
 				if (clk_1='1')then
 					clk_2<=not clk_2; 
@@ -34,9 +38,14 @@ begin
 					cnt15<=cnt15+1;
 					clk_5<='0';
 				end if;
-				
+				if (cnt4 = 0) then
+					clk_t <= not clk_t;
+					cnt4 <= 1;
+				else
+					cnt4 <= 0;
+				end if;
 			end if; 
-			clk_8<=clk_3;
+			clk_8<=clk_t;
 			clk_15<=clk_5;
 		end process;
 

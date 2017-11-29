@@ -6,6 +6,8 @@ entity IdExRegisters is
 			clk : in std_logic;
 			rst : in std_logic;
 			
+			IdExFlush : in std_logic;
+
 			PCIn : in std_logic_vector(15 downto 0);
 			rdIn : in std_logic_vector(3 downto 0);
 			rxIn : in std_logic_vector(2 downto 0);
@@ -60,7 +62,7 @@ architecture Behavioral of IdExRegisters is
 begin
 	process(clk, rst)
 	begin		
-		if (rst = '1') then
+		if (rst = '1' or IdExFlush = '1') then
 			PCOut <= (others => '0');
 			rdOut <= (others => '0');
 			rxOut <= (others => '0');
