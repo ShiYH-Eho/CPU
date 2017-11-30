@@ -1,5 +1,34 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    15:23:57 11/23/2015 
+-- Design Name: 
+-- Module Name:    ConflictController - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
 entity ConflictController is
 	port(
 			rst : in std_logic;
@@ -7,7 +36,6 @@ entity ConflictController is
 			
 			branch : in std_logic;
 			branchJudge : in std_logic;
-			jump : in std_logic;
 			
 			IdExMemRead : in std_logic;
 			IdExRd : in std_logic_vector(3 downto 0);
@@ -33,14 +61,14 @@ architecture Behavioral of ConflictController is
 begin
 	process(rst)
 	begin 
-		if (rst = '1') then 
+		if (rst = '0') then 
 			PCKeep <= '0';
 			IfIdKeep <= '0';
 			IfIdFlush <= '0';
 			WriteKeep <= '0';
 			IdExFlush <= '0';
 			ExMemFlush <= '0';
-		elsif (clk'event and clk = '1') then
+		elsif (clk'event and clk = '0') then
 		if (IdExMemRead = '1') then
 			if ((IfIdASrc = "001" or IfIdBSrc = "01") and IdExRd = '0' & IfIdRx) then
 				PCKeep <= '1';
@@ -56,14 +84,7 @@ begin
 				IdExFlush <= '1';
 				WriteKeep <= '1';
 				ExMemFlush <= '0';
-			elsif (IfIdAsrc = "011" and IdExRd = "1000") then 
-				PCKeep <= '1';
-				IfIdKeep <= '1';
-				IfIdFlush <= '0';
-				IdExFlush <= '1';
-				WriteKeep <= '1';
-				ExMemFlush <= '0';
-			elsif ((IdExRd = '0' & IfIdRy or IdExrd = '0' & IfIdRx) and IfIdMemWrite = '1') then
+			elsif ((IdExRd = '0' & IfIdRy) and IfIdMemWrite = '1') then
 				PCKeep <= '1';
 				IfIdKeep <= '1';
 				IfIdFlush <= '0';
@@ -78,7 +99,7 @@ begin
 				IfIdFlush <= '0';
 				ExMemFlush <= '0';
 			end if;
-		elsif ((branch = '1' and branchJudge = '1' )or (jump = '1')) then 
+		elsif (branch = '1' and branchJudge = '1') then 
 			PCKeep <= '0';
 			IfIdKeep <= '0';
 			WriteKeep <= '1';

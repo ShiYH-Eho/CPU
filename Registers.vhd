@@ -1,5 +1,33 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    20:39:24 11/20/2015 
+-- Design Name: 
+-- Module Name:    Registers - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
 
 entity Registers is
 	port(
@@ -13,6 +41,7 @@ entity Registers is
 			WbData : in std_logic_vector(15 downto 0);
 			WB : in std_logic;
 			
+			r0Out, r1Out, r2Out,r3Out,r4Out,r5Out,r6Out,r7Out : out std_logic_vector(15 downto 0);
 			dataA : out std_logic_vector(15 downto 0);
 			dataB : out std_logic_vector(15 downto 0);
 			dataT : out std_logic_vector(15 downto 0);
@@ -38,7 +67,7 @@ begin
 	
 	process(clk, rst)
 	begin
-		if (rst = '1') then
+		if (rst = '0') then
 			r0 <= (others => '0');
 			r1 <= (others => '0');
 			r2 <= (others => '0');
@@ -50,7 +79,7 @@ begin
 			T <= (others => '0');
 			IH <= (others => '0');			
 			SP <= (others => '0');
-		elsif (clk'event and clk = '1' and WB = '1') then
+		elsif (clk'event and clk = '0' and WB = '1') then
 			case WbRd is 
 				when "0000" => r0 <= WbData;
 				when "0001" => r1 <= WbData;
@@ -102,5 +131,13 @@ begin
 	dataIH <= IH;
 	dataT <= T;
 	
+	r0Out <= r0;
+	r1Out <= r1;
+	r2Out <= r2;
+	r3Out <= r3;
+	r4Out <= r4;
+	r5Out <= r5;
+	r6Out <= r6;
+	r7Out <= r7;
 end Behavioral;
 

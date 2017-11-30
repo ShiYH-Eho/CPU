@@ -1,162 +1,163 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    12:48:17 11/16/2015 
+-- Design Name: 
+-- Module Name:    Controller - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity Controller is
-    port(
-        commandIn : in std_logic_vector (15 downto 0);
-        rst : in std_logic;
-        ControllerOut : out std_logic_vector(19 downto 0) := x"00000";
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
 
---        ALUOP : out std_logic_vector(3 downto 0) := "0000";
---        choose_A : out std_logic_vector(2 downto 0) := "000"
---        choose_B : out std_logic_vector(1 downto 0) := "00";
---        choose_Dst : out std_logic_vector (2 downto 0) := "000";
---        special_Reg : out std_logic_vector(1 downto 0) := "00"
---        RegWrite , MemRead , MemWrite  ,MemtoReg : out std_logic := "0";
---        branch , jump : out std_logic := "0";
-        choose_imm : out std_logic_vector(2 downto 0) := "000";
-        choose_data : out std_logic := '0'
-    );
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity Controller is
+	port(	commandIn : in std_logic_vector(15 downto 0);
+			rst : in std_logic;
+			imm : out std_logic_vector(2 downto 0);
+			controllerOut :  out std_logic_vector(20 downto 0) 
+			-- RegWrite(1)	SpeReg(2) RegDst(3) Asrc(3) Bsrc(2) ALUOP(4) 
+			-- MemRead(1) MemWrite(1) MemToReg(1)  branch(1) jump(1) dataSrc(1)
+			);
 end Controller;
 
 architecture Behavioral of Controller is
+--signal tmp : std_logic_vector(20 downto 0);
 begin
-    --ALUOP <= ControllerOut(19 downto 16);
-    --choose_A <= ControllerOut(15 downto 13);
-    --choose_B <= ControllerOut(12 downto 11);
-    --choose_Dst <= ControllerOut(10 downto 8);
-    --special_Reg <= ControllerOut(7 downto 6);
-    --RegWrite <= ControllerOut(5);
-    --MemRead <= ControllerOut(4);
-    --MemWrite <= ControllerOut(3);
-    --MemtoReg <= ControllerOut(2);
-    --branch <= ControllerOut(1);
-    --jump <= ControllerOut(0);
-    process(commandIn,rst)
-    begin
-        if (rst = '1') then
-            ControllerOut <= x"00000";
-        else
-            case commandIn(15 downto 11) is
-                when "01001" => --ADDIU
-                    ControllerOut <= "00000011100100100000";
-                    choose_imm <= "110";
-                when "01000" => --ADDIU3
-                    ControllerOut <= "00000011101000100000";
-                    choose_imm <= "100";
-                when "01100" => 
-                    case commandIn(10 downto 8) is
-                        when "011" => --ADDSP
-                            ControllerOut <= "00000111110001100000";
-                            choose_imm <= "110";
-                        when "000" => --BTEQZ
-                            ControllerOut <= "00011100000011000010";
-                            choose_imm <= "110";
-                        when "100" => --MTSP
-                            ControllerOut <= "00000100010000100000";
-                            choose_imm <= "000";
-                        when others =>
-                    end case ;
-                when "11100" => 
-                    case commandIn(1 downto 0) is
-                        when "01" => --ADDU
-                            ControllerOut <= "00000011001100100000";
-                            choose_imm <= "000";
-                        when "11" => --SUBU
-                            ControllerOut <= "00010011001100100000";
-                            choose_imm <= "000";
-                        when others =>
-                    end case ;
-                when "11101" =>
-                    case commandIn(4 downto 0) is
-                        when "01100" => --AND
-                            ControllerOut <= "00100011000100100000";
-                            choose_imm <= "000";
-                        when "01010" => --CMP
-                            ControllerOut <= "10100011011000100000";
-                            choose_imm <= "000";
-                        when "00000" =>
-                            case commandIn(7 downto 5) is
-                                when "000" => --JR
-                                    ControllerOut <= "11110000000000000001";
-                                    choose_imm <= "000";
-                                when "010" => --MFPC
-                                    ControllerOut <= "00001010000100100000";
-                                    choose_imm <= "000";
-                                when others =>
-                            end case ;
-                        when "01101" => --OR
-                            ControllerOut <= "00110011000100100000";
-                            choose_imm <= "000";
-                        when "00010" => --SLT
-                            ControllerOut <= "10000011011000100000";
-                            choose_imm <= "000";
-                        when "00110" => --SRLV
-                            ControllerOut <= "01100100101000100000";  
-                            choose_imm <= "000";  
-                        when "01111" => --NOT
-                            ControllerOut <= "01110011000100100000";
-                            choose_imm <= "000";
-                        when others =>
-                    end case;
-                when "00010" => --B
-                    ControllerOut <= "11110000000000000010";
-                    choose_imm <= "111";
-                when "00100" => --BEQZ
-                    ControllerOut <= "00010010000000000010";
-                    choose_imm <= "110";
-                when "00101" => --BNEZ
-                    ControllerOut <= "10010010000000000010";
-                    choose_imm <= "110";
-                when "01101" => --LI
-                    ControllerOut <= "00001110000100100000";
-                    choose_imm <= "010";
-                when "10011" => --LW
-                    ControllerOut <= "00000011101000110100";
-                    choose_imm <= "101";
-                when "10010" => --LW_SP
-                    ControllerOut <= "00000111100101110100";
-                    choose_imm <= "110";
-                when "11110" => 
-                    if (commandIn(0) = '0') then --MFIH
-                        ControllerOut <= "00001000000110100000";
-                        choose_imm <= "000";
-                    else --MTIH
-                        ControllerOut <= "00000010010100100000";    
-                        choose_imm <= "000";
-                    end if ;
-                when "00001" => --NOP
-                    ControllerOut <= "11110000000000000000";
-                    choose_imm <= "000";
-                when "00110" => 
-                    case commandIn(1 downto 0) is
-                        when "00" => --SLL
-                            ControllerOut <= "01000101100100100000";
-                            choose_imm <= "001";
-                        when "11" => --SRA
-                            ControllerOut <= "01010101100100100000";
-                            choose_imm <= "001";
-                        when others =>
-                    end case ;
-                when "11011" => --SW
-                    ControllerOut <= "00000011100000001000";
-                    choose_imm <= "101";
-                when "11010" => --SW_SP
-                    ControllerOut <= "00000111100001001000";
-                    choose_imm <= "110";
-                when "01111" => --MOVE
-                    ControllerOut <= "00000100000100100000";
-                    choose_imm <= "000";
-                when "01010" => --SLTI
-                    ControllerOut <= "10000011111000100000";
-                    choose_imm <= "110";
-                when others => --error
-            end case ;
-            if (commandIn(15 downto 11) = "11011") then
-                choose_data <= '1';
-            else
-                choose_data <= '0';
-            end if ;
-        end if;
-    end process;
+	process(rst, commandIn)
+	begin
+		if rst = '0' then
+			controllerOut <= (others => '0');
+			imm <= (others => '0');
+		else
+			case commandIn(15 downto 11) is
+				when "11101" =>
+					
+					case commandIn(4 downto 0) is
+						when "01100" =>--AND
+							imm <= "000";
+							controllerOut <= "100001001100010000000";
+						when "01010" =>--CMP 
+							imm <= "000";
+							controllerOut <= "100110001101101000000";
+						when "00000" =>
+							if (commandIn(7 downto 0) = "00000000") then --JR
+								imm <= "000";
+								controllerOut <= "000000000001111000110";
+							elsif (commandIn(7 downto 0) = "01000000") then--MFPC
+								imm <= "000";
+								controllerOut <= "100001101000000000000";
+							end if;
+						when "01101" => --OR
+							imm <= "000";
+							controllerOut <= "100001001100011000000";
+						when "00100" => --SLLV
+							imm <= "000";
+							controllerOut <= "100010010010110000000";
+						when "00111" => --SRAV
+							imm <= "000";
+							controllerOut <= "100010010011100000000";
+						when others =>--error	
+					end case;
+				when "01001" => --ADDIU
+					imm <= "111";
+					controllerOut <= "100001001110000000000";
+				when "01000" => --ADDIU3
+					imm <= "101";
+					controllerOut <= "100010001110000000000";
+				when "01100" =>
+					case commandIn(10 downto 8) is 
+						when "011" => --ADDSP
+							imm <= "111";
+							controllerOut <= "101100011110000000000";
+						when "000" => --BTEQZ
+							imm <= "111";
+							controllerOut <= "011000110000001000100";
+						when "100" => --MTSP
+							imm <= "000";
+							controllerOut <= "100100010000000000000";
+						when others => --error
+					end case;
+				when "00010" => --B
+					imm <= "001";
+					controllerOut <= "000000000001111000100";
+				when "11100" =>
+					if (commandIn(1 downto 0) = "01") then--ADDU
+						imm <= "000";
+						controllerOut <= "100011001100000000000";
+					elsif (commandIn(1 downto 0) = "11") then --SUBU
+						imm <= "000";
+						controllerOut <= "100011001100001000000";
+					end if;
+				when "00100" => --BEQZ
+					imm <= "111";
+					controllerOut <= "000000001000001000100";
+				when "00101" => --BNEZ
+					imm <= "111";
+					controllerOut <= "000000001001001000100";
+				when "01101" => --LI
+					imm <= "011";
+					controllerOut <= "100001111000000000000";
+				when "10011" => --LW
+					imm <= "110";
+					controllerOut <= "100010001110000101000";
+				when "10010" => --LW_SP
+					imm <= "111";
+					controllerOut <= "101001011110000101000";
+				when "11110" =>
+					if (commandIn(0) = '0') then --MFIH
+						imm <= "000";
+						controllerOut <= "110001100000000000000";
+					else --MTIH
+						imm <= "000";
+						controllerOut <= "100101001000000000000";
+					end if;
+				when "00110" =>
+					if (commandIn(1 downto 0) = "00") then --SLL
+						imm <= "100";
+						controllerOut <= "100001010110111000000";
+					elsif (commandIn(1 downto 0) = "11") then --SRA
+						imm <= "100";
+						controllerOut <= "100001010111000000000";
+					end if;
+				when "11011" => --SW
+					imm <= "110";
+					controllerOut <= "000000001110000010001";
+				when "11010" => --SW_SP
+					imm <= "111";
+					controllerOut <= "001000011110000010000";
+				when "01110" => --CMPI
+					imm <= "111";
+					controllerOut <= "100110001111010000000";
+				when "01111" => --MOVE
+					imm <= "000";
+					controllerOut <= "100001010000000000000";
+				when "01011" => --SLTI
+					imm <= "011";
+					controllerOut <= "100110001111011000000"; 
+				when others => --error or NOP
+					imm <= "000";
+					controllerOut <= "000000000001111000000";
+			end case;
+		end if;
+	end process;
 end Behavioral;
+

@@ -1,5 +1,33 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    21:13:57 11/21/2015 
+-- Design Name: 
+-- Module Name:    IdExRegisters - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
 
 entity IdExRegisters is
 	port(
@@ -7,7 +35,7 @@ entity IdExRegisters is
 			rst : in std_logic;
 			
 			IdExFlush : in std_logic;
-
+			
 			PCIn : in std_logic_vector(15 downto 0);
 			rdIn : in std_logic_vector(3 downto 0);
 			rxIn : in std_logic_vector(2 downto 0);
@@ -60,11 +88,11 @@ end IdExRegisters;
 
 architecture Behavioral of IdExRegisters is
 begin
-	process(clk, rst)
+	process(clk, rst, IdExFlush)
 	begin		
-		if (rst = '1' or IdExFlush = '1') then
+		if (rst = '0') then
 			PCOut <= (others => '0');
-			rdOut <= (others => '0');
+			rdOut <= (others => '1');
 			rxOut <= (others => '0');
 			ryOut <= (others => '0');
 			ASrcOut <= (others => '0');
@@ -86,6 +114,7 @@ begin
 			ALUOpOut <= "0000";
 			dataSrcOut <= '0';
 		elsif (clk'event and clk = '1') then
+		if (IdExFlush = '0') then
 			PCOut <= PCIn;
 			rdOut <= rdIn;
 			rxOut <= rxIn;
@@ -113,6 +142,30 @@ begin
 			branchOut <= branchIn;
 			ALUOpOut <= ALUOpIn;		
 			dataSrcOut <= dataSrcIn;
+		else 
+		PCOut <= (others => '0');
+			rdOut <= (others => '0');
+			rxOut <= (others => '0');
+			ryOut <= (others => '1');
+			ASrcOut <= (others => '0');
+			BSrcOut <= (others => '0');
+			
+			dataAOut <= (others => '0');
+			dataBOut <= (others => '0');
+			dataTOut <= (others => '0');
+			dataIHOut <= (others => '0');
+			dataSPOut <= (others => '0');
+			immOut <= (others => '0');
+			
+			WBOut <= '0';
+			memWriteOut <= '0';
+			memReadOut <= '0';
+			memToRegOut <= '0';
+			branchout <= '0';
+			jumpOut <= '0';
+			ALUOpOut <= "0000";
+			dataSrcOut <= '0';
+		end if;
 		end if;
 	end process;
 end Behavioral;

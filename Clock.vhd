@@ -1,10 +1,39 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    22:20:05 11/24/2015 
+-- Design Name: 
+-- Module Name:    Clock - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
 
 entity Clock is
 	port(
 		rst : in std_logic;
 		clkIn : in std_logic;
+		
 		clk_8 : out std_logic;
 		clk_15 : out std_logic
 	);
@@ -16,7 +45,7 @@ architecture Behavioral of Clock is
 begin
 	process (clkIn,rst)
 		begin
-			if (rst = '1') then
+			if (rst = '0') then
 			 cnt15 <= 0;
 			 cnt4 <= 0;
 			elsif (clkIn'event and clkIn='1') then 
@@ -31,13 +60,14 @@ begin
 					end if;
 				end if;
 				
-				if(cnt15=14) then 
+				if(cnt15=5) then 
 					cnt15<=0;
 					clk_5<='1';
 				else
 					cnt15<=cnt15+1;
 					clk_5<='0';
 				end if;
+				
 				if (cnt4 = 0) then
 					clk_t <= not clk_t;
 					cnt4 <= 1;
