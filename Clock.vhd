@@ -11,12 +11,12 @@ entity Clock is
 end Clock;
 
 architecture Behavioral of Clock is
-	signal clk_1,clk_2,clk_3,clk_4,clk_5 : std_logic;
-	signal cnt15:natural range 0 to 15;
+	signal clk_1,clk_2,clk_3,clk_4,clk_5 ,clk_t: std_logic;
+	signal cnt15,cnt4:natural range 0 to 15;
 begin
-	process (clkIn)
+	process (clkIn,rst)
 		begin
-			if (rst = '0') then
+			if (rst = '1') then
 			 cnt15 <= 0;
 			 cnt4 <= 0;
 			elsif (clkIn'event and clkIn='1') then 

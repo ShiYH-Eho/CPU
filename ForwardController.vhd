@@ -28,9 +28,9 @@ begin
 	process(ExMemRd, MemWbRd, ExMemRegWrite, MemWbRegWrite, IdExRx, IdExRy)
 	begin
 		
-		if (ExMemRegWrite = '1'  and ExMemRd /= "1111" and (IdExAsrc = "001" or IdExBsrc = "01") and ExMemRd = '0' & IdExRx) then--Ex 
+		if (ExMemRegWrite = '1' and (IdExAsrc = "001" or IdExBsrc = "01") and ExMemRd = '0' & IdExRx) then--Ex 
 			ForwardA <= "10";
-		elsif (MemWbRegWrite = '1'  and ExMemRd /= '0' & IdExRx--Mem
+		elsif (MemWbRegWrite = '1' -- and ExMemRd /= '0' & IdExRx--Mem
 			and MemWbRd = '0' & IdExRx and (IdExAsrc = "001" or IdExBsrc = "01") ) then
 			ForwardA <= "01";
 		else
@@ -38,7 +38,7 @@ begin
 				when "011" => --SP
 					if (ExMemRegWrite = '1'  and ExMemRd = "1000") then--Ex 
 						ForwardA <= "10";
-					elsif (MemWbRegWrite = '1'  and ExMemRd /= "1000"	--Mem
+					elsif (MemWbRegWrite = '1'--  and ExMemRd /= "1000"	--Mem
 						and MemWbRd = "1000") then
 						ForwardA <= "01";
 					else 
@@ -47,7 +47,7 @@ begin
 				when "100" => --IH
 					if (ExMemRegWrite = '1'  and ExMemRd = "1001") then--Ex 
 						ForwardA <= "10";
-					elsif (MemWbRegWrite = '1'  and ExMemRd /= "1001"	--Mem
+					elsif (MemWbRegWrite = '1'--  and ExMemRd /= "1001"	--Mem
 						and MemWbRd = "1001") then
 						ForwardA <= "01";
 					else 
@@ -56,7 +56,7 @@ begin
 				when "110" => --T
 					if (ExMemRegWrite = '1'  and ExMemRd = "1010") then--Ex 
 						ForwardA <= "10";
-					elsif (MemWbRegWrite = '1'  and ExMemRd /= "1010"	--Mem
+					elsif (MemWbRegWrite = '1'--  and ExMemRd /= "1010"	--Mem
 						and MemWbRd = "1010") then
 						ForwardA <= "01";
 					else 
@@ -70,8 +70,8 @@ begin
 		
 		if (ExMemRegWrite = '1' and(IdExAsrc = "010" or IdExBsrc = "10") and ExMemRd = '0' & IdExRy) then
 			ForwardB <= "10";
-		elsif (MemWbRegWrite = '1'  and ExMemRd /= '0' & IdExRy  and(IdExAsrc = "010" or IdExBsrc = "10") 
-			and MemWbRd = '0' & IdExRy) then
+		elsif (MemWbRegWrite = '1'--  and ExMemRd /= '0' & IdExRy  
+			and(IdExAsrc = "010" or IdExBsrc = "10") and MemWbRd = '0' & IdExRy) then
 			ForwardB <= "01";
 		else 
 			ForwardB <= "00";

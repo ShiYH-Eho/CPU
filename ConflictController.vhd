@@ -56,7 +56,14 @@ begin
 				IdExFlush <= '1';
 				WriteKeep <= '1';
 				ExMemFlush <= '0';
-			elsif ((IdExRd = '0' & IfIdRy) and IfIdMemWrite = '1') then
+			elsif (IfIdAsrc = "011" and IdExRd = "1000") then 
+				PCKeep <= '1';
+				IfIdKeep <= '1';
+				IfIdFlush <= '0';
+				IdExFlush <= '1';
+				WriteKeep <= '1';
+				ExMemFlush <= '0';
+			elsif ((IdExRd = '0' & IfIdRy or IdExrd = '0' & IfIdRx) and IfIdMemWrite = '1') then
 				PCKeep <= '1';
 				IfIdKeep <= '1';
 				IfIdFlush <= '0';
