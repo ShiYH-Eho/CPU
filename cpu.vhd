@@ -3,34 +3,34 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity cpu is
 	port(
-			rst : in std_logic; --reset
-			clkIn : in std_logic; --时钟�?  默认�?50M  可以通过修改绑定管教来改�?
-			
+--			rst : in std_logic; --reset
+			clk_in : in std_logic; --时钟�?????  默认�?????50M  可以通过修改绑定管教来改�?????
+			clk_uart_in : in std_logic;
+			touch_btn : in std_logic_vector(5 downto 0);		
+			dip_sw : in std_logic_vector(31 downto 0);	
 			--串口
-			dataReady : in std_logic;   
-			tbre : in std_logic;
-			tsre : in std_logic;
-			rdn : inout std_logic;
-			wrn : inout std_logic;
+			uart_dataready : in std_logic;   
+			uart_tbre : in std_logic;
+			uart_tsre : in std_logic;
+			uart_rdn : out std_logic;
+			uart_wrn : out std_logic;
 			
 			--RAM1  存放数据
-			ram1En : out std_logic;
-			ram1We : out std_logic;
-			ram1Oe : out std_logic;
-			ram1Data : inout std_logic_vector(15 downto 0);
-			ram1Addr : out std_logic_vector(15 downto 0);
+			base_ram_ce_n : out std_logic;
+			base_ram_we_n : out std_logic;
+			base_ram_oe_n : out std_logic;
+			base_ram_data : inout std_logic_vector(31 downto 0);
+			base_ram_addr : out std_logic_vector(19 downto 0);
 			
-			--RAM2 存放程序和指�?
-			ram2En : out std_logic;
-			ram2We : out std_logic;
-			ram2Oe : out std_logic;
-			ram2Data : inout std_logic_vector(15 downto 0);
-			ram2Addr : out std_logic_vector(15 downto 0);
+			--RAM2 存放程序和指�?????
+			ext_ram_ce_n : out std_logic;
+			ext_ram_we_n : out std_logic;
+			ext_ram_oe_n : out std_logic;
+			ext_ram_data : inout std_logic_vector(31 downto 0);
+			ext_ram_addr : out std_logic_vector(19 downto 0);
 			
-			--debug  digit1、digit2显示PC值，led显示当前指令的编�?
-			digit1 : out std_logic_vector(6 downto 0);
-			digit2 : out std_logic_vector(6 downto 0);
-			led : out std_logic_vector(15 downto 0)
+			--debug  leds(31 downto 24)、leds(31 downto 24)显示PC值，led显示当前指令的编�?????
+			leds : out std_logic_vector(31 downto 0)
 	);
 			
 end cpu;
@@ -59,36 +59,36 @@ architecture Behavioral of cpu is
 		ins_addr 		: in std_logic_vector(15 downto 0);
 		data_out		: out std_logic_vector(15 downto 0);
 		ins_out 		: out std_logic_vector(15 downto 0);
-		tbre			: in std_logic;
-		tsre			: in std_logic;
-		rdn 			: inout std_logic;
-		wrn				: inout std_logic;
-		ram1_en 		: out std_logic;
-		ram1_oe			: out std_logic;
-		ram1_we			: out std_logic;
-		ram1_addr		: out std_logic_vector(15 downto 0);
-		ram1_data		: inout std_logic_vector(15 downto 0);
-		ram2_en			: out std_logic;
-		ram2_oe			: out std_logic;
-		ram2_we			: out std_logic;
-		ram2_addr		: out std_logic_vector(15 downto 0);
-		ram2_data		: inout std_logic_vector(15 downto 0);
-		data_ready		: in std_logic
+		uart_tbre			: in std_logic;
+		uart_tsre			: in std_logic;
+		uart_rdn 			: out std_logic;
+		uart_wrn			: out std_logic;
+		base_ram_ce_n 		: out std_logic;
+		base_ram_oe_n			: out std_logic;
+		base_ram_we_n			: out std_logic;
+		base_ram_addr		: out std_logic_vector(19 downto 0);
+		base_ram_data		: inout std_logic_vector(31 downto 0);
+		ext_ram_ce_n			: out std_logic;
+		ext_ram_oe_n			: out std_logic;
+		ext_ram_we_n			: out std_logic;
+		ext_ram_addr		: out std_logic_vector(19 downto 0);
+		ext_ram_data		: inout std_logic_vector(31 downto 0);
+		uart_dataready		: in std_logic
 	);
 	end component;
 	
-	--ALU运算�?
+	--ALU运算�?????
 	component ALU
 			port(
 		Asrc       :  in STD_LOGIC_VECTOR(15 downto 0);
 		Bsrc       :  in STD_LOGIC_VECTOR(15 downto 0);
 		ALUop		  :  in STD_LOGIC_VECTOR(3 downto 0);
-		ALUresult  :  out STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000"; -- 默认设为�?0
+		ALUresult  :  out STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000"; -- 默认设为�?????0
 		branchJudge : out std_logic
 		);
 	end component;
 	
-	--选择�?
+	--选择�?????
 	component AMux
 		port(
 			forwardA : in std_logic_vector(1 downto 0);
@@ -110,7 +110,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--选择�?
+	--选择�?????
 	component BMux
 		port(
 			forwardA : in std_logic_vector(1 downto 0);
@@ -156,7 +156,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--产生�?有控制信号的控制�?
+	--产生�?????有控制信号的控制�?????
 	component Controller
 		port(	
 			commandIn : in std_logic_vector (15 downto 0);
@@ -175,7 +175,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--PC值计�?&选择�?
+	--PC值计�?????&选择�?????
 	component  ExAdderAndBranchMux
 		port(
 			PCIn : in std_logic_vector(15 downto 0);
@@ -188,7 +188,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--EX/MEM阶段寄存�?
+	--EX/MEM阶段寄存�?????
 	component ExMemRegisters
 		port(
 			clk : in std_logic;
@@ -248,7 +248,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--ID/EX阶段寄存�?
+	--ID/EX阶段寄存�?????
 	component IdExRegisters
 		port(
 			clk : in std_logic;
@@ -306,7 +306,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--IF/ID阶段寄存�?
+	--IF/ID阶段寄存�?????
 	component IfIdRegisters
 		port(
 			rst : in std_logic;
@@ -327,7 +327,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--立即数扩展单�?
+	--立即数扩展单�?????
 	component ImmExtend
 		port(
 			 immIn : in std_logic_vector(10 downto 0);
@@ -336,7 +336,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--MEM/WB阶段寄存�?
+	--MEM/WB阶段寄存�?????
 	component MemWbRegisters
 		port(
 			clk : in std_logic;
@@ -355,7 +355,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--PC加法�? 实现PC+1
+	--PC加法�????? 实现PC+1
 	component PCAdder
 		port( 
 			adderIn : in std_logic_vector(15 downto 0);
@@ -363,7 +363,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--PC选择�? 顺序执行or跳转
+	--PC选择�????? 顺序执行or跳转
 	component PCMux
 		port( branch : in std_logic;
 			branchJudge : in std_logic;
@@ -383,7 +383,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--目的寄存器�?�择�?
+	--目的寄存器�?�择�?????
 	component RdMux
 		port(
 			rx : in std_logic_vector(2 downto 0);
@@ -416,7 +416,21 @@ architecture Behavioral of cpu is
 			dataIH : out std_logic_vector(15 downto 0)
 		);
 	end component;
-	
+	component StageDataUnit
+	port(
+			dataAIn : in std_logic_vector(15 downto 0);
+			dataBIn : in std_logic_vector(15 downto 0);
+			
+			forwardA : in std_logic_vector(1 downto 0);
+			forwardB : in std_logic_vector(1 downto 0);
+			
+			dataEx : in std_logic_vector(15 downto 0);
+			dataMem : in std_logic_vector(15 downto 0);
+			
+			dataAOut : out std_logic_vector(15 downto 0);
+			dataBOut : out std_logic_vector(15 downto 0)
+	);
+	end component;
 	--clock
 	signal clk : std_logic;
 	signal clk_8 : std_logic;
@@ -476,6 +490,9 @@ architecture Behavioral of cpu is
 	signal WbData : std_logic_vector(15 downto 0);
 	signal WB : std_logic;
 	
+	signal stageA : std_logic_vector(15 downto 0);
+	signal stageB : std_logic_vector(15 downto 0);
+
 	--AMux
 	signal AMuxOut : std_logic_vector(15 downto 0);
 	
@@ -502,7 +519,7 @@ architecture Behavioral of cpu is
 	signal ioData : std_logic_vector(15 downto 0);
 begin
 	u1 : PCRegister
-	port map(	rst => rst,
+	port map(	rst => touch_btn(5),
 			clk => clk,
 			PCKeep => PCKeep,
 			PCIn => PCMuxOut,
@@ -517,7 +534,7 @@ begin
 		
 	u3 : 	IfIdRegisters
 	port map(
-			rst => rst,
+			rst => touch_btn(5),
 			clk => clk,
 			commandIn => ioCommand,
 			PCIn => AddedPc,
@@ -546,7 +563,7 @@ begin
 		
 	u5 : Controller
 	port map(	commandIn => IfIdCommand,
-			rst => rst,
+			rst => touch_btn(5),
 			controllerOut => controllerOut,
 			choose_imm => choose_imm,
 			choose_data =>choose_data
@@ -555,7 +572,7 @@ begin
 	u6 : Registers
 	port map(
 			clk => clk,
-			rst => rst,
+			rst => touch_btn(5),
 			
 			rx => rx1,
 			ry => ry1,
@@ -582,7 +599,7 @@ begin
 	u8 : IdExRegisters
 	port map(
 			clk => clk,
-			rst => rst,
+			rst => touch_btn(5),
 
 			IdExFlush => IdExFlush,
 			
@@ -715,11 +732,9 @@ begin
 	u14 : ExMemRegisters
 	port map(
 			clk => clk,
-			rst => rst,
-			--dataAIn => DataA2,
-			--dataBIn => DataB2,
-			dataAIn => AMuxOut,
-			dataBIn => BMuxOut,
+			rst => touch_btn(5),
+			dataAIn => stageA,
+			dataBIn => stageB,
 			rdIn => IdExRd,
 			PCIn => BranchPC,
 			ansIn => ALUAns,
@@ -751,7 +766,7 @@ begin
 	u15 : MemWbRegisters
 	port map(
 			clk => clk,
-			rst => rst,
+			rst => touch_btn(5),
 			
 			dataIn => ioData,
 			ansIn => ExMemAns,
@@ -767,7 +782,7 @@ begin
 ---
 	 u16 : ConflictController
 	 port map(
-			rst => rst,
+			rst => touch_btn(5),
 			clk => clk,
 
 			branch =>ExMemBranch,
@@ -806,8 +821,8 @@ begin
 	
 	u18 : IO
 	port map(
-		rst => rst,
-		clk 			=> clkIn,
+		rst => touch_btn(5),
+		clk 			=> touch_btn(5),
 		MemWrite		=> ExMemWrite,
 		MemRead		=> ExMemRead,
 		ram_data		=> ExMemData,
@@ -815,73 +830,89 @@ begin
 		ins_addr 	=> PcOut,
 		data_out		=> ioData,
 		ins_out 		=> ioCommand,
-		tbre			=> tbre,
-		tsre			=> tsre,
-		rdn 			=> rdn,
-		wrn			=> wrn,
-		ram1_en 		=> ram1En,
-		ram1_oe		=> ram1Oe,
-		ram1_we		=> ram1We,
-		ram1_addr	=> ram1Addr,
-		ram1_data	=> ram1Data,
-		ram2_en	   => ram2En,
-		ram2_oe		=> ram2Oe,
-		ram2_we		=> ram2We,
-		ram2_addr	=> ram2Addr,
-		ram2_data	=> ram2Data,
-		data_ready	=> dataReady
+		uart_tbre			=> uart_tbre,
+		uart_tsre			=> uart_tsre,
+		uart_rdn 			=> uart_rdn,
+		uart_wrn			=> uart_wrn,
+		base_ram_ce_n		=> base_ram_ce_n,
+		base_ram_oe_n		=> base_ram_oe_n,
+		base_ram_we_n		=> base_ram_we_n,
+		base_ram_addr	=> base_ram_addr,
+		base_ram_data	=> base_ram_data,
+		ext_ram_ce_n	   => ext_ram_ce_n,
+		ext_ram_oe_n		=> ext_ram_oe_n,
+		ext_ram_we_n	=> ext_ram_we_n,
+		ext_ram_addr	=> ext_ram_addr,
+		ext_ram_data	=> ext_ram_data,
+		uart_dataready	=> uart_dataready
 	);
 	
 	u19 : Clock
 	port map(
-		clkIn => clkIn,
+		clkIn => clk_in,
 		
 		clk_8 => clk_8,
 		clk_15 => clk
 	);
+
+	u20 : StageDataUnit
+	port map(
+			dataAIn => dataA2,
+			dataBIn => dataB2,
+			
+			forwardA => ForwardX,
+			forwardB => ForwardY,
+			
+			dataEx => ExMemAns,
+			dataMem => WbData,
+			
+			dataAOut => stageA,
+			dataBOut => stageB
+	);
 	
-	led <= ioCommand;
+	ext_ram_addr(19 downto 16) <= "0000";
+	leds(15 downto 0) <= ioCommand;
 	--jing <= PCOut;
 	process(PCOut)
 		begin
 		case PCOut(7 downto 4) is
-			when "0000" => digit1 <= "0111111";--0
-			when "0001" => digit1 <= "0001001";--1
-			when "0010" => digit1 <= "1011110";--2
-			when "0011" => digit1 <= "1011011";--3
-			when "0100" => digit1 <= "1101001";--4
-			when "0101" => digit1 <= "1110110";--5
-			when "0110" => digit1 <= "1110111";--6
-			when "0111" => digit1 <= "0011001";--7
-			when "1000" => digit1 <= "1111111";--8
-			when "1001" => digit1 <= "1111111";--9
-			when "1010" => digit1 <= "1111101";--A
-			when "1011" => digit1 <= "1100111";--B
-			when "1100" => digit1 <= "0110110";--C
-			when "1101" => digit1 <= "1001111";--D
-			when "1110" => digit1 <= "1110110";--E
-			when "1111" => digit1 <= "1110100";--F
-			when others => digit1 <= "0000000";
+			when "0000" => leds(31 downto 24) <= "01111110";--0
+			when "0001" => leds(31 downto 24) <= "00010010";--1
+			when "0010" => leds(31 downto 24) <= "10111100";--2
+			when "0011" => leds(31 downto 24) <= "10110110";--3
+			when "0100" => leds(31 downto 24) <= "11010010";--4
+			when "0101" => leds(31 downto 24) <= "11100110";--5
+			when "0110" => leds(31 downto 24) <= "11101110";--6
+			when "0111" => leds(31 downto 24) <= "00110010";--7
+			when "1000" => leds(31 downto 24) <= "11111110";--8
+			when "1001" => leds(31 downto 24) <= "11111110";--9
+			when "1010" => leds(31 downto 24) <= "11111010";--A
+			when "1011" => leds(31 downto 24) <= "11001110";--B
+			when "1100" => leds(31 downto 24) <= "01101100";--C
+			when "1101" => leds(31 downto 24) <= "10011110";--D
+			when "1110" => leds(31 downto 24) <= "11101100";--E
+			when "1111" => leds(31 downto 24) <= "11101000";--F
+			when others => leds(31 downto 24) <= "00000000";
 		end case;
 		
 		case PCOut(3 downto 0) is
-			when "0000" => digit2 <= "0111111";--0
-			when "0001" => digit2 <= "0001001";--1
-			when "0010" => digit2 <= "1011110";--2
-			when "0011" => digit2 <= "1011011";--3
-			when "0100" => digit2 <= "1101001";--4
-			when "0101" => digit2 <= "1110110";--5
-			when "0110" => digit2 <= "1110111";--6
-			when "0111" => digit2 <= "0011001";--7
-			when "1000" => digit2 <= "1111111";--8
-			when "1001" => digit2 <= "1111111";--9
-			when "1010" => digit2 <= "1111101";--A
-			when "1011" => digit2 <= "1100111";--B
-			when "1100" => digit2 <= "0110110";--C
-			when "1101" => digit2 <= "1001111";--D
-			when "1110" => digit2 <= "1110110";--E
-			when "1111" => digit2 <= "1110100";--F
-			when others => digit2 <= "0000000";
+			when "0000" => leds(23 downto 16) <= "01111110";--0
+			when "0001" => leds(23 downto 16) <= "00010010";--1
+			when "0010" => leds(23 downto 16) <= "10111100";--2
+			when "0011" => leds(23 downto 16) <= "10110110";--3
+			when "0100" => leds(23 downto 16) <= "11010010";--4
+			when "0101" => leds(23 downto 16) <= "11100110";--5
+			when "0110" => leds(23 downto 16) <= "11101110";--6
+			when "0111" => leds(23 downto 16) <= "00110010";--7
+			when "1000" => leds(23 downto 16) <= "11111110";--8
+			when "1001" => leds(23 downto 16) <= "11111110";--9
+			when "1010" => leds(23 downto 16) <= "11111010";--A
+			when "1011" => leds(23 downto 16) <= "11001110";--B
+			when "1100" => leds(23 downto 16) <= "01101100";--C
+			when "1101" => leds(23 downto 16) <= "10011110";--D
+			when "1110" => leds(23 downto 16) <= "11101100";--E
+			when "1111" => leds(23 downto 16) <= "11101000";--F
+			when others => leds(23 downto 16) <= "00000000";
 		end case;
 	end process;
 end Behavioral;
