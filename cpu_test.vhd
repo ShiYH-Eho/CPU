@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity cpu is
+entity cpu_test is
 	port(
 --			rst : in std_logic; --reset
 			clk_in : in std_logic; --时钟�????????  默认�????????50M  可以通过修改绑定管教来改�????????
@@ -33,9 +33,9 @@ entity cpu is
 			leds : out std_logic_vector(31 downto 0)
 	);
 			
-end cpu;
+end cpu_test;
 
-architecture Behavioral of cpu is
+architecture Behavioral of cpu_test is
 	
 	--时钟
 	component Clock
@@ -875,7 +875,7 @@ begin
 	);
 	
 	ext_ram_addr(19 downto 16) <= "0000";
-	leds(15 downto 0) <= ioCommand;
+	leds(15 downto 0) <= iodata;
 	--jing <= PCOut;
 	process(PCOut)
 		begin
