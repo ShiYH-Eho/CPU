@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity cpu is
 	port(
 --			rst : in std_logic; --reset
-			clk_in : in std_logic; --时钟�?????????  默认�?????????50M  可以通过修改绑定管教来改�?????????
+			clk_in : in std_logic; --时钟�???????????  默认�???????????50M  可以通过修改绑定管教来改�???????????
 			clk_uart_in : in std_logic;
 			touch_btn : in std_logic_vector(5 downto 0);		
 			dip_sw : in std_logic_vector(31 downto 0);	
@@ -22,14 +22,14 @@ entity cpu is
 			base_ram_data : inout std_logic_vector(31 downto 0);
 			base_ram_addr : out std_logic_vector(19 downto 0);
 			
-			--RAM2 存放程序和指�?????????
+			--RAM2 存放程序和指�???????????
 			ext_ram_ce_n : out std_logic;
 			ext_ram_we_n : out std_logic;
 			ext_ram_oe_n : out std_logic;
 			ext_ram_data : inout std_logic_vector(31 downto 0);
 			ext_ram_addr : out std_logic_vector(19 downto 0);
 			
-			--debug  leds(31 downto 24)、leds(31 downto 24)显示PC值，led显示当前指令的编�?????????
+			--debug  leds(31 downto 24)、leds(31 downto 24)显示PC值，led显示当前指令的编�???????????
 			leds : out std_logic_vector(31 downto 0)
 	);
 			
@@ -78,18 +78,18 @@ architecture Behavioral of cpu is
 	);
 	end component;
 	
-	--ALU运算�?????????
+	--ALU运算�???????????
 	component ALU
 			port(
 		Asrc       :  in STD_LOGIC_VECTOR(15 downto 0);
 		Bsrc       :  in STD_LOGIC_VECTOR(15 downto 0);
 		ALUop		  :  in STD_LOGIC_VECTOR(3 downto 0);
-		ALUresult  :  out STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000"; -- 默认设为�?????????0
+		ALUresult  :  out STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000"; -- 默认设为�???????????0
 		branchJudge : out std_logic
 		);
 	end component;
 	
-	--选择�?????????
+	--选择�???????????
 	component AMux
 		port(
 			forwardA : in std_logic_vector(1 downto 0);
@@ -111,7 +111,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--选择�?????????
+	--选择�???????????
 	component BMux
 		port(
 			forwardA : in std_logic_vector(1 downto 0);
@@ -157,7 +157,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--产生�?????????有控制信号的控制�?????????
+	--产生�???????????有控制信号的控制�???????????
 	component Controller
 		port(	
 			commandIn : in std_logic_vector (15 downto 0);
@@ -176,8 +176,8 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--PC值计�?????????&选择�?????????
-	component  ExAdderAndBranchMux
+	--PC值计�???????????&选择�???????????
+	component ExAdderAndBranchMux
 		port(
 			PCIn : in std_logic_vector(15 downto 0);
 			imm : in std_logic_vector(15 downto 0);
@@ -189,7 +189,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--EX/MEM阶段寄存�?????????
+	--EX/MEM阶段寄存�???????????
 	component ExMemRegisters
 		port(
 			clk : in std_logic;
@@ -250,7 +250,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--ID/EX阶段寄存�?????????
+	--ID/EX阶段寄存�???????????
 	component IdExRegisters
 		port(
 			clk : in std_logic;
@@ -308,7 +308,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--IF/ID阶段寄存�?????????
+	--IF/ID阶段寄存�???????????
 	component IfIdRegisters
 		port(
 			rst : in std_logic;
@@ -329,7 +329,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--立即数扩展单�?????????
+	--立即数扩展单�???????????
 	component ImmExtend
 		port(
 			 immIn : in std_logic_vector(10 downto 0);
@@ -338,7 +338,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--MEM/WB阶段寄存�?????????
+	--MEM/WB阶段寄存�???????????
 	component MemWbRegisters
 		port(
 			clk : in std_logic;
@@ -357,7 +357,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--PC加法�????????? 实现PC+1
+	--PC加法�??????????? 实现PC+1
 	component PCAdder
 		port( 
 			adderIn : in std_logic_vector(15 downto 0);
@@ -365,7 +365,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--PC选择�????????? 顺序执行or跳转
+	--PC选择�??????????? 顺序执行or跳转
 	component PCMux
 		port( branch : in std_logic;
 			branchJudge : in std_logic;
@@ -385,7 +385,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--目的寄存器�?�择�?????????
+	--目的寄存器�?�择�???????????
 	component RdMux
 		port(
 			rx : in std_logic_vector(2 downto 0);
@@ -420,6 +420,8 @@ architecture Behavioral of cpu is
 	end component;
 	component StageDataUnit
 	port(
+			rst : in std_logic;
+
 			dataAIn : in std_logic_vector(15 downto 0);
 			dataBIn : in std_logic_vector(15 downto 0);
 			
@@ -431,6 +433,128 @@ architecture Behavioral of cpu is
 			
 			dataAOut : out std_logic_vector(15 downto 0);
 			dataBOut : out std_logic_vector(15 downto 0)
+	);
+	end component;
+	component ledDebug
+	port(
+		rst              : In  STD_LOGIC;
+		clk              : IN  STD_LOGIC;
+		SW               : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		DebugEnable      : IN  STD_LOGIC;
+		LedOut           : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+		Number           : OUT STD_LOGIC_VECTOR( 7 DOWNTO 0);
+
+		if_PCKeep        : IN  STD_LOGIC := '1';
+		if_NewPC         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		if_PCToIM        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		if_PCPlus1       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		if_PCRx          : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		if_PCAddImm      : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		if_Inst          : IN  STD_LOGIC_VECTOR(15 DOWNTO 0); --instruction from ram2
+
+		id_Inst          : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		id_PCPlus1       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		id_PCAddImm      : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		id_Imme          : IN  STD_LOGIC_VECTOR(10 DOWNTO 0);
+		ext_Imme         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+		ctrl_CurPC       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ctrl_ImmeSrc     : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+		ctrl_ZeroExt     : IN  STD_LOGIC;
+		ctrl_ALUOp       : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		ctrl_ASrc        : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+		ctrl_BSrc        : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+		ctrl_MemRead     : IN  STD_LOGIC;
+		ctrl_MemWE       : IN  STD_LOGIC;
+		ctrl_DstReg      : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		ctrl_RegWE       : IN  STD_LOGIC;
+		ctrl_ASrc4       : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		ctrl_BSrc4       : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		ctrl_PCMuxSel    : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+		ctrl_ExceptPC    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ctrl_NowPC       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ctrl_InDelayslot : IN  STD_LOGIC;
+		ctrl_BranchFlag  : IN  STD_LOGIC;
+
+		rf_Data1         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		rf_Data2         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		id_data1         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		id_data2         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+		exe_Data1        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		exe_Data2        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		exe_Imme         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		exe_DstReg       : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		exe_RegWE        : IN  STD_LOGIC;
+		exe_MemRead      : IN  STD_LOGIC;
+		exe_MemWE        : IN  STD_LOGIC;
+		exe_ALUOp        : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		exe_ASrc         : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+		exe_BSrc         : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+		exe_BOp          : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		exe_ASrc4        : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		exe_BSrc4        : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		exe_MemWriteData : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		exe_InDelayslot  : IN  STD_LOGIC;
+		exe_PCSel        : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+
+		alu_F            : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		alu_T            : IN  STD_LOGIC;
+
+		mem_DstReg       : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
+		mem_RegWE        : IN  STD_LOGIC;
+		mem_MemWE        : IN  STD_LOGIC;
+		mem_MemRead      : IN  STD_LOGIC;
+		mem_ALUOut       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		mem_MemWriteData : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		mem_ReadData     : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		mem_DstVal       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		mem_MemSignal    : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+
+		mem_vga_wrn      : IN  STD_LOGIC;
+		mem_vga_data     : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		mem_vgaR         : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+		mem_vgaG         : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+		mem_vgaB         : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+
+		wb_DstReg        : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		wb_RegWE         : IN  STD_LOGIC;
+		wb_DstVal        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);    
+
+		ram1_en          : IN  STD_LOGIC;
+		ram1_oe          : IN  STD_LOGIC;
+		ram1_we          : IN  STD_LOGIC;
+		ram2_en          : IN  STD_LOGIC;
+		ram2_oe          : IN  STD_LOGIC;
+		ram2_we          : IN  STD_LOGIC;
+		ram1_data        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0); 
+		ram1_addr        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ram2_data        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0); 
+		ram2_addr        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+		ram1_InstRead    : IN  STD_LOGIC;
+		ram1_NowPC       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ram1_Except      : IN  STD_LOGIC;
+		ram1_ExceptPC    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ram1_LED         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ram1_numout      : IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
+		ram2_LED         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ram2_numout      : IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
+		UartOut          : IN  STD_LOGIC_VECTOR(15 downto 0);
+		
+
+		fwd_ForwardA     : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+		fwd_ForwardB     : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+
+		hdu_IFID_Keep    : IN  STD_LOGIC;
+		hdu_IDEX_Stall   : IN  STD_LOGIC;
+
+		data_ready       : in STD_LOGIC;
+		keyboard_key_value: in STD_LOGIC_VECTOR(15 downto 0);
+
+		R0, R1, R2, R3   : IN  STD_LOGIC_VECTOR(15 downto 0);
+		R4, R5, R6, R7   : IN  STD_LOGIC_VECTOR(15 downto 0);
+		SP, T, IH        : IN  STD_LOGIC_VECTOR(15 downto 0)
 	);
 	end component;
 	--clock
@@ -535,11 +659,11 @@ begin
 			adderOut => AddedPC
 	);
 		
-	u3 : 	IfIdRegisters
+	u3 : IfIdRegisters
 	port map(
 			rst => touch_btn(5),
 			clk => clk,
-			commandIn => dip_sw(15 downto 0),
+			commandIn => dip_sw(31 downto 16),
 			--commandIn => ioCommand,
 			PCIn => AddedPc,
 			IfIdKeep => IfIdKeep,
@@ -726,7 +850,8 @@ begin
 	port map(
 			PCIn => IdExPC,
 			imm => imm2,
-			dataA => DataA2,
+			dataA => stageA,
+			--dataA => DataA2,
 			
 			jump => IdExJump,
 			
@@ -827,7 +952,7 @@ begin
 	u18 : IO
 	port map(
 		rst => touch_btn(5),
-		clk 			=> clk_in,
+		clk 			=> touch_btn(4),
 		MemWrite		=> ExMemWrite,
 		MemRead		=> ExMemRead,
 		ram_data		=> ExMemData,
@@ -855,7 +980,7 @@ begin
 	u19 : Clock
 	port map(
 		rst => touch_btn(5),
-		clkIn => clk_in,
+		clkIn => touch_btn(4),--clk_in,
 		clk_2 => clk_2,
 		clk_4 => clk_4,
 		clk_6 => clk
@@ -863,6 +988,8 @@ begin
 
 	u20 : StageDataUnit
 	port map(
+			rst => touch_btn(5),
+
 			dataAIn => dataA2,
 			dataBIn => dataB2,
 			
@@ -876,8 +1003,138 @@ begin
 			dataBOut => stageB
 	);
 	
+	u21 : ledDebug
+	port map(
+		rst              => touch_btn(5),
+		clk              => touch_btn(4),
+		SW               => dip_sw(15 downto 0),
+		DebugEnable      => touch_btn(0),
+		LedOut           => leds(15 downto 0),
+		--Number           : OUT STD_LOGIC_VECTOR( 7 DOWNTO 0);
+
+		if_PCKeep        => PCKeep,
+		if_NewPC         => PCMuxOut,
+		if_PCToIM        => PcOut,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		if_PCPlus1       => addedPC,
+		if_PCRx          => x"0000" ,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		if_PCAddImm      => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		--if_Inst          => ioCommand, --instruction from ram2
+		if_Inst			=> dip_sw(31 downto 16),
+		id_Inst          => ifidcommand,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		id_PCPlus1       => addedPC,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		id_PCAddImm      => BranchPC,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		id_Imme          => "00000000000",--: IN  STD_LOGIC_VECTOR(10 DOWNTO 0);
+		ext_Imme          => extendedimm,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+		ctrl_CurPC       => PCOut,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ctrl_ImmeSrc     => choose_imm,--: IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+		ctrl_ZeroExt     => choose_imm(2),--: IN  STD_LOGIC;
+		ctrl_ALUOp       => controllerOut(19 downto 16),--: IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		ctrl_ASrc        => controllerOut(15 downto 13),--: IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+		ctrl_BSrc        => controllerOut(12 downto 11),--: IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+		ctrl_MemRead     => controllerOut(4),--: IN  STD_LOGIC;
+		ctrl_MemWE       => controllerOut(3),--: IN  STD_LOGIC;
+		ctrl_DstReg      => rdMuxOut,--: IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		ctrl_RegWE       => controllerOut(5),--: IN  STD_LOGIC;
+		ctrl_ASrc4        => "0000",--: IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		ctrl_BSrc4        => "0000",--: IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		ctrl_PCMuxSel    => "00",--: IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+		ctrl_ExceptPC    => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ctrl_NowPC       => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ctrl_InDelayslot => '0',--: IN  STD_LOGIC;
+		ctrl_BranchFlag  => controllerOut(1),--=> : IN  STD_LOGIC;
+
+		rf_Data1         => dataa1,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		rf_Data2         => datab1,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		id_data1         => stagea,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		id_data2         => stageb,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+		exe_Data1        => AmuxOut,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		exe_Data2        => BmuxOut,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		exe_Imme         => imm2,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		exe_DstReg       => idexrd,--,: IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		exe_RegWE        => idexwb,--: IN  STD_LOGIC;
+		exe_MemRead      => idexmemread,--: IN  STD_LOGIC;
+		exe_MemWE        => idexmemwrite,--: IN  STD_LOGIC;
+		exe_ALUOp        => idexALUOP,--: IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		exe_ASrc         => Asrc(1 downto 0),--: IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+		exe_BSrc         => Bsrc,--: IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+		exe_BOp          => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		exe_ASrc4        => "0000",--: IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		exe_BSrc4        => "0000",--: IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		exe_MemWriteData => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		exe_InDelayslot  => '0',--: IN  STD_LOGIC;
+		exe_PCSel        => "00",--: IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+
+		alu_F            => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		alu_T            => '0',--: IN  STD_LOGIC;
+
+		mem_DstReg       => ExmemRd,--: IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
+		mem_RegWE        => Exmemregwrite,--: IN  STD_LOGIC;
+		mem_MemWE        => exmemwrite,--: IN  STD_LOGIC;
+		mem_MemRead      => exmemread,--: IN  STD_LOGIC;
+		mem_ALUOut       => exmemans,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		mem_MemWriteData => exmemdata,--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		mem_ReadData     => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		mem_DstVal       => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		mem_MemSignal    => "000",--: IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+
+		mem_vga_wrn      => '0',--: IN  STD_LOGIC;
+		mem_vga_data     => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		mem_vgaR         => "000",--: IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+		mem_vgaG         => "000",--: IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+		mem_vgaB         => "000",--: IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+
+		wb_DstReg        => wbrd,--: IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+		wb_RegWE         => wb,--: IN  STD_LOGIC;
+		wb_DstVal        => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);    
+
+		ram1_en           => '0',--=> base_ram_ce_n,--: IN  STD_LOGIC;
+		ram1_oe          => '0',-- => base_ram_oe_n,--: IN  STD_LOGIC;
+		ram1_we          => '0',-- => base_ram_we_n,--: IN  STD_LOGIC;
+		ram2_en           => '0',--=> ext_ram_ce_n,--: IN  STD_LOGIC;
+		ram2_oe           => '0',--=> ext_ram_oe_n,--: IN  STD_LOGIC;
+		ram2_we          => '0',-- => ext_ram_we_n,--: IN  STD_LOGIC;
+		ram1_data        => x"0000",--=> base_ram_data(15 downto 0),--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0); 
+		ram1_addr        => x"0000",--=> base_ram_addr(15 downto 0),--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ram2_data        => x"0000",--=> ext_ram_data(15 downto 0),--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0); 
+		ram2_addr        => x"0000",--=> ext_ram_addr(15 downto 0),--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+        ram1_InstRead     => '0',--: IN  STD_LOGIC;
+		ram1_NowPC       => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ram1_Except      => '0',-- : IN  STD_LOGIC;
+		ram1_ExceptPC    => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ram1_LED         => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ram1_numout      => x"00",--: IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
+		ram2_LED         => x"0000",--: IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+		ram2_numout      => x"00",--: IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
+		UartOut          => x"0000",--: IN  STD_LOGIC_VECTOR(15 downto 0);
+		
+
+		fwd_ForwardA     => forwardA,--: IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+		fwd_ForwardB     => forwardB,--: IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+
+		hdu_IFID_Keep     => '0',--: IN  STD_LOGIC;
+		hdu_IDEX_Stall   => '0',-- : IN  STD_LOGIC;
+
+		data_ready       => uart_dataready,--: in STD_LOGIC;
+		keyboard_key_value => x"0000",--: in STD_LOGIC_VECTOR(15 downto 0);
+		
+		R0=> x"0000",
+		R1=> x"0000",
+		R2=> x"0000",
+		R3   => x"0000",--: IN  STD_LOGIC_VECTOR(15 downto 0);
+		R4=> x"0000",
+		R5=> x"0000",
+		R6=> x"0000",
+		R7   => x"0000",--: IN  STD_LOGIC_VECTOR(15 downto 0);
+		SP=> x"0000",
+		 T=> x"0000",
+		IH        => x"0000"--: IN  STD_LOGIC_VECTOR(15 downto 0)
+	);
+
 	ext_ram_addr(19 downto 16) <= "0000";
-	leds(15 downto 0) <= wbdata;
+	--leds(15 downto 0) <= iodata;
 	--jing <= PCOut;
 	process(PCOut)
 		begin

@@ -79,49 +79,49 @@ begin
 		
 		
 		
-		if (ExMemRegWrite = '1'  and ExMemRd /= "1111" and   ExMemRd = '0' & IdExRx) then--Ex 
+		if (ExMemRegWrite = '1' and   ExMemRd = '0' & IdExRx) then--Ex 
 			forwardX <= "10";
-		elsif (MemWbRegWrite = '1'  and ExMemRd /= '0' & IdExRx--Mem
+		elsif (MemWbRegWrite = '1' -- and ExMemRd /= '0' & IdExRx--Mem
 			and MemWbRd = '0' & IdExRx  ) then
 			forwardX <= "01";
 		else
-			case IdExAsrc is
-				when "011" => --SP
-					if (ExMemRegWrite = '1'  and ExMemRd = "1000") then--Ex 
-						forwardX <= "10";
-					elsif (MemWbRegWrite = '1'  and ExMemRd /= "1000"	--Mem
-						and MemWbRd = "1000") then
-						forwardX <= "01";
-					else 
-						forwardX <= "00";
-					end if;
-				when "100" => --IH
-					if (ExMemRegWrite = '1'  and ExMemRd = "1001") then--Ex 
-						forwardX <= "10";
-					elsif (MemWbRegWrite = '1'  and ExMemRd /= "1001"	--Mem
-						and MemWbRd = "1001") then
-						forwardX <= "01";
-					else 
-						forwardX <= "00";
-					end if;
-				when "110" => --T
-					if (ExMemRegWrite = '1'  and ExMemRd = "1010") then--Ex 
-						forwardX <= "10";
-					elsif (MemWbRegWrite = '1'  and ExMemRd /= "1010"	--Mem
-						and MemWbRd = "1010") then
-						forwardX <= "01";
-					else 
-						forwardX <= "00";
-					end if;
-				when others =>
+--			case IdExAsrc is
+--				when "011" => --SP
+--					if (ExMemRegWrite = '1'  and ExMemRd = "1000") then--Ex 
+--						forwardX <= "10";
+--					elsif (MemWbRegWrite = '1'  and ExMemRd /= "1000"	--Mem
+--						and MemWbRd = "1000") then
+--						forwardX <= "01";
+--					else 
+--						forwardX <= "00";
+--					end if;
+--				when "100" => --IH
+--					if (ExMemRegWrite = '1'  and ExMemRd = "1001") then--Ex 
+--						forwardX <= "10";
+--					elsif (MemWbRegWrite = '1'  and ExMemRd /= "1001"	--Mem
+--						and MemWbRd = "1001") then
+--						forwardX <= "01";
+--					else 
+--						forwardX <= "00";
+--					end if;
+--				when "110" => --T
+--					if (ExMemRegWrite = '1'  and ExMemRd = "1010") then--Ex 
+--						forwardX <= "10";
+--					elsif (MemWbRegWrite = '1'  and ExMemRd /= "1010"	--Mem
+--						and MemWbRd = "1010") then
+--						forwardX <= "01";
+--					else 
+--						forwardX <= "00";
+--					end if;
+--				when others =>
 					forwardX <= "00";
-			end case;
+--			end case;
 		end if;
 		
 		
 		if (ExMemRegWrite = '1' and ExMemRd = '0' & IdExRy) then
 			ForwardY <= "10";
-		elsif (MemWbRegWrite = '1'  and ExMemRd /= '0' & IdExRy 
+		elsif (MemWbRegWrite = '1'--  and ExMemRd /= '0' & IdExRy 
 			and MemWbRd = '0' & IdExRy) then
 			forwardy <= "01";
 		else 

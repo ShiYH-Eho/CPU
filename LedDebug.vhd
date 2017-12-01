@@ -5,7 +5,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-USE WORK.COMMON.ALL;
+--USE WORK.COMMON.ALL;
 
 ENTITY LedDebug IS PORT (
     rst              : In  STD_LOGIC;
@@ -33,7 +33,7 @@ ENTITY LedDebug IS PORT (
     ctrl_ImmeSrc     : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
     ctrl_ZeroExt     : IN  STD_LOGIC;
     ctrl_ALUOp       : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
-    ctrl_ASrc        : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+    ctrl_ASrc        : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
     ctrl_BSrc        : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
     ctrl_MemRead     : IN  STD_LOGIC;
     ctrl_MemWE       : IN  STD_LOGIC;
@@ -137,64 +137,64 @@ ARCHITECTURE Bhv OF LedDebug IS
     SIGNAL infos : DebugInfos(0 to 63);
 BEGIN
     infos( 0) <= if_PCToIM;
-    infos( 1) <= ZERO15 & if_PCKeep;
+    infos( 1) <= "000000000000000" & if_PCKeep;
     infos( 2) <= if_PCRx;
     infos( 3) <= if_PCAddImm;
     infos( 4) <= if_Inst; 
     infos( 5) <= if_PCPlus1;
     infos( 6) <= keyboard_key_value;
-    infos( 7) <= ZERO15 & data_ready;
+    infos( 7) <= "000000000000000" & data_ready;
 
     infos( 8) <= id_Inst;
     infos( 9) <= id_PCPlus1;
     infos(10) <= id_PCAddImm;
-    infos(11) <= ZERO5 & id_Imme;
+    infos(11) <= "00000" & id_Imme;
     infos(12) <= ext_Imme;
-    infos(13) <= ZERO8 & fwd_ForwardA & ZERO2 & fwd_ForwardB & ZERO2;
-    infos(14) <= ZERO15 & hdu_IFID_Keep;
-    infos(15) <= ZERO16;
+    infos(13) <= "00000000" & fwd_ForwardA & "00" & fwd_ForwardB & "00";
+    infos(14) <= "000000000000000" & hdu_IFID_Keep;
+    infos(15) <= "0000000000000000";
 
-    infos(16) <= ctrl_ImmeSrc & ctrl_ZeroExt & ZERO8 & ctrl_PCMuxSel & ctrl_InDelayslot & hdu_IDEX_Stall;
+    infos(16) <= ctrl_ImmeSrc & ctrl_ZeroExt & "00000000" & ctrl_PCMuxSel & ctrl_InDelayslot & hdu_IDEX_Stall;
     infos(17) <= ctrl_ASrc4 & ctrl_ASrc & ctrl_BSrc4 & ctrl_BSrc & ctrl_ALUOp;
     infos(18) <= rf_Data1;
     infos(19) <= rf_Data2;
     infos(20) <= id_data1;
     infos(21) <= id_data2;
-    infos(22) <= ZERO15 & ctrl_BranchFlag;
-    infos(23) <= ZERO16;
+    infos(22) <= "000000000000000" & ctrl_BranchFlag;
+    infos(23) <= "0000000000000000";
 
     infos(24) <= exe_Data1;
     infos(25) <= exe_Data2;
     infos(26) <= exe_Imme;
-    infos(27) <= exe_MemRead & exe_MemWE & ZERO9 & exe_DstReg & exe_RegWE;
+    infos(27) <= exe_MemRead & exe_MemWE & "000000000" & exe_DstReg & exe_RegWE;
     infos(28) <= exe_ASrc4 & exe_ASrc & exe_BSrc4 & exe_BSrc & exe_ALUOp;
     infos(29) <= exe_BOp; -- ALU_B
     infos(30) <= exe_MemWriteData;
-    infos(31) <= ZERO14 & exe_PCSel;
+    infos(31) <= "00000000000000" & exe_PCSel;
 
     infos(32) <= alu_F;
-    infos(33) <= ZERO8 & ram1_en & ram1_oe & ram1_we & ZERO1 & ram2_en & ram2_oe & ram2_we & ZERO1;
+    infos(33) <= "00000000" & ram1_en & ram1_oe & ram1_we & '0' & ram2_en & ram2_oe & ram2_we & '0';
     infos(34) <= ram1_data;
     infos(35) <= ram1_addr;
     infos(36) <= ram2_data;
     infos(37) <= ram2_addr;
     infos(38) <= UartOut;
-    infos(39) <= ZERO16;
+    infos(39) <= "0000000000000000";
 
-    infos(40) <= mem_MemRead & mem_MemWE & ZERO9 & mem_DstReg & mem_RegWE;
+    infos(40) <= mem_MemRead & mem_MemWE & "000000000" & mem_DstReg & mem_RegWE;
     infos(41) <= mem_ALUOut;
     infos(42) <= mem_MemWriteData;
     infos(43) <= mem_ReadData;
     infos(44) <= mem_DstVal;
-    infos(45) <= ZERO13 & mem_MemSignal;
-    infos(46) <= wb_RegWE & ZERO11 & wb_DstReg;
+    infos(45) <= "0000000000000" & mem_MemSignal;
+    infos(46) <= wb_RegWE & "00000000000" & wb_DstReg;
     infos(47) <= wb_DstVal;
     
-    infos(48) <= ZERO16;
-    infos(49) <= ZERO16;
-    infos(50) <= ZERO16;
-    infos(51) <= ZERO16;
-    infos(52) <= ZERO16;
+    infos(48) <= "0000000000000000";
+    infos(49) <= "0000000000000000";
+    infos(50) <= "0000000000000000";
+    infos(51) <= "0000000000000000";
+    infos(52) <= "0000000000000000";
     infos(53) <= SP;
     infos(54) <= T;
     infos(55) <= IH;
@@ -211,8 +211,8 @@ BEGIN
     PROCESS(clk, rst, SW, DebugEnable)
         Variable index : integer range 0 to 63;
     BEGIN
-        if rst = '0' then
-            LedOut <= ZERO16;
+        if rst = '1' then
+            LedOut <= "0000000000000000";
         else
             index := conv_integer(SW(5 DOWNTO 0));
             LedOut <= infos(index);

@@ -15,7 +15,7 @@ begin
 	process(clk,rst)
 	begin
 		if (rst = '1') then 
-			PCOut <= "0000000000000001";
+			PCOut <= "0000000000000000";
 		elsif clk'event and clk = '1'then
 				if PCKeep = '0' then
 					PCOut <= PCIn;
