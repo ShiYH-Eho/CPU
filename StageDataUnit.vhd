@@ -21,12 +21,14 @@ end StageDataUnit;
 architecture Behavioral of StageDataUnit is
 
 begin
-	process (rst)
-	begin 
-	--if (rst = '1') then
-		--dataAOut <= (others => '0');
-		--dataBOut <= (others => '0');
-	--else 
+process
+begin
+--	process (rst)
+--	begin 
+	if (rst = '1') then
+		dataAOut <= (others => '0');
+		dataBOut <= (others => '0');
+	else 
 		case forwardA is 
 			when "00" => --regs
 				dataAOut <= dataAIn;
@@ -49,8 +51,8 @@ begin
 		
 		--dataAOut <= dataAIn;
 		--dataBOut <= dataBIn;
-	--end if;
-	end process;
+	end if;
+end process;
 	
 end Behavioral;
 
