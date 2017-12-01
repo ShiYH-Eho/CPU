@@ -1,52 +1,43 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
 
 entity Clock is
 	port(
 		rst : in std_logic;
 		clkIn : in std_logic;
-		clk_8 : out std_logic;
-		clk_15 : out std_logic
+		clk_2 : out std_logic;
+		clk_4 : out std_logic;
+		clk_6 : out std_logic
 	);
 end Clock;
 
 architecture Behavioral of Clock is
-	signal clk_1,clk_2,clk_3,clk_4,clk_5 ,clk_t: std_logic;
-	signal cnt15,cnt4:natural range 0 to 15;
+	signal cnt6,cnt4,cnt2:natural range 0 to 15;
+	signal ck6,ck4,ck2 : std_logic := '1';
 begin
 	process (clkIn,rst)
 		begin
 			if (rst = '1') then
-			 cnt15 <= 0;
+			 cnt6 <= 0;
 			 cnt4 <= 0;
-			elsif (clkIn'event and clkIn='1') then 
-				clk_1<=not clk_1; 
-				if (clk_1='1')then
-					clk_2<=not clk_2; 
-					if (clk_2='1')then
-						clk_3<=not clk_3;
-						if(clk_3='1')then
-							clk_4<=not clk_4;
-						end if;
-					end if;
+			elsif (clkIn'event and clkIn='1') then
+				cnt6 <= cnt6 + 1;
+				cnt4 <= cnt4 + 1;
+				if (cnt6 = 2) then
+					ck6 <= not ck6;
+					cnt6 <= 0;
 				end if;
-				
-				if(cnt15=14) then 
-					cnt15<=0;
-					clk_5<='1';
-				else
-					cnt15<=cnt15+1;
-					clk_5<='0';
-				end if;
-				if (cnt4 = 0) then
-					clk_t <= not clk_t;
-					cnt4 <= 1;
-				else
+				if (cnt4 = 1) then 
+					ck4 <= not ck4;
 					cnt4 <= 0;
 				end if;
-			end if; 
-			clk_8<=clk_t;
-			clk_15<=clk_5;
+				ck2 <= not ck2;
+			end if;
+			clk_6 <= ck6;
+			clk_4 <= ck4;
+			clk_2 <= ck2; 
 		end process;
 
 end Behavioral;

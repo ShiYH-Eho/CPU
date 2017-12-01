@@ -36,7 +36,7 @@ begin
 	imm_10_0 <= tmpImm;
 	commandOut <= tmpCommand;
 	PCOut <= tmpPC;
-	process(rst, clk, commandIn, PCIn)
+	process(rst, clk, commandIn, PCIn,IfIdFlush)
 	begin 
 		if (rst = '1' or IfIdFlush = '1') then
 			tmpRx <= (others => '0');
@@ -46,13 +46,15 @@ begin
 			tmpCommand <= (others => '0');
 			tmpPC <= (others => '0');
 		elsif (clk'event and clk = '1' and IfIdKeep = '0')then
-			tmpRx <= commandIn(10 downto 8);
-			tmpRy <= commandIn(7 downto 5);
-			tmpRz <= commandIn(4 downto 2);
-			tmpImm <= commandIn(10 downto 0);
-			
-			tmpCommand<= commandIn;
-			tmpPC <= PCIn;
+			if (IfIdKeep = '0')then
+				tmpRx <= commandIn(10 downto 8);
+				tmpRy <= commandIn(7 downto 5);
+				tmpRz <= commandIn(4 downto 2);
+				tmpImm <= commandIn(10 downto 0);
+				
+				tmpCommand<= commandIn;
+				tmpPC <= PCIn;
+			end if;
 		end if;
 	end process;
 end Behavioral;

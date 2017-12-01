@@ -1,6 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
 entity test is
     port(
         clk_in : in std_logic;
@@ -52,7 +53,7 @@ architecture behavioral of test is
     end component;
     signal data,addr : std_logic_vector(15 downto 0);
     signal data_out,ins_out : std_logic_vector(15 downto 0);
-    signal ins_addr : std_logic_vector(15 downto 0) := x"0000";
+    signal ins_addr : std_logic_vector(15 downto 0) := x"0030";
 begin
     data <= dip_sw(14 downto 0) & '0';
     addr <= dip_sw(30 downto 16) & '0';
@@ -60,7 +61,7 @@ begin
     u1:IO
     port map(
                 rst => touch_btn(5),
-                clk => clk_uart_in,
+                clk => touch_btn(4),
                 MemWrite => dip_sw(31),
                 MemRead  => dip_sw(15),
                 ram_data => data,
@@ -84,4 +85,8 @@ begin
                 ext_ram_data => ext_ram_data,
                 uart_dataready => uart_dataready
        );
+ --      process(touch_btn(0))
+   --    begin
+     --   ins_addr <= ins_addr + 1;
+     --  end process;
 end behavioral;

@@ -1,10 +1,10 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity cpu is
+entity cpu_test is
 	port(
 --			rst : in std_logic; --reset
-			clk_in : in std_logic; --时钟�?????????  默认�?????????50M  可以通过修改绑定管教来改�?????????
+			clk_in : in std_logic; --时钟�????????  默认�????????50M  可以通过修改绑定管教来改�????????
 			clk_uart_in : in std_logic;
 			touch_btn : in std_logic_vector(5 downto 0);		
 			dip_sw : in std_logic_vector(31 downto 0);	
@@ -22,20 +22,20 @@ entity cpu is
 			base_ram_data : inout std_logic_vector(31 downto 0);
 			base_ram_addr : out std_logic_vector(19 downto 0);
 			
-			--RAM2 存放程序和指�?????????
+			--RAM2 存放程序和指�????????
 			ext_ram_ce_n : out std_logic;
 			ext_ram_we_n : out std_logic;
 			ext_ram_oe_n : out std_logic;
 			ext_ram_data : inout std_logic_vector(31 downto 0);
 			ext_ram_addr : out std_logic_vector(19 downto 0);
 			
-			--debug  leds(31 downto 24)、leds(31 downto 24)显示PC值，led显示当前指令的编�?????????
+			--debug  leds(31 downto 24)、leds(31 downto 24)显示PC值，led显示当前指令的编�????????
 			leds : out std_logic_vector(31 downto 0)
 	);
 			
-end cpu;
+end cpu_test;
 
-architecture Behavioral of cpu is
+architecture Behavioral of cpu_test is
 	
 	--时钟
 	component Clock
@@ -78,18 +78,18 @@ architecture Behavioral of cpu is
 	);
 	end component;
 	
-	--ALU运算�?????????
+	--ALU运算�????????
 	component ALU
 			port(
 		Asrc       :  in STD_LOGIC_VECTOR(15 downto 0);
 		Bsrc       :  in STD_LOGIC_VECTOR(15 downto 0);
 		ALUop		  :  in STD_LOGIC_VECTOR(3 downto 0);
-		ALUresult  :  out STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000"; -- 默认设为�?????????0
+		ALUresult  :  out STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000"; -- 默认设为�????????0
 		branchJudge : out std_logic
 		);
 	end component;
 	
-	--选择�?????????
+	--选择�????????
 	component AMux
 		port(
 			forwardA : in std_logic_vector(1 downto 0);
@@ -111,7 +111,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--选择�?????????
+	--选择�????????
 	component BMux
 		port(
 			forwardA : in std_logic_vector(1 downto 0);
@@ -157,7 +157,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--产生�?????????有控制信号的控制�?????????
+	--产生�????????有控制信号的控制�????????
 	component Controller
 		port(	
 			commandIn : in std_logic_vector (15 downto 0);
@@ -176,7 +176,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--PC值计�?????????&选择�?????????
+	--PC值计�????????&选择�????????
 	component  ExAdderAndBranchMux
 		port(
 			PCIn : in std_logic_vector(15 downto 0);
@@ -189,7 +189,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--EX/MEM阶段寄存�?????????
+	--EX/MEM阶段寄存�????????
 	component ExMemRegisters
 		port(
 			clk : in std_logic;
@@ -210,7 +210,6 @@ architecture Behavioral of cpu is
 			memToRegIn : in std_logic;
 			dataSrcIn : in std_logic;
 			
-			wbKeep : in std_logic;
 
 			rdOut : out std_logic_vector(3 downto 0);
 			PCOut : out std_logic_vector(15 downto 0);
@@ -250,7 +249,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--ID/EX阶段寄存�?????????
+	--ID/EX阶段寄存�????????
 	component IdExRegisters
 		port(
 			clk : in std_logic;
@@ -308,7 +307,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--IF/ID阶段寄存�?????????
+	--IF/ID阶段寄存�????????
 	component IfIdRegisters
 		port(
 			rst : in std_logic;
@@ -329,7 +328,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--立即数扩展单�?????????
+	--立即数扩展单�????????
 	component ImmExtend
 		port(
 			 immIn : in std_logic_vector(10 downto 0);
@@ -338,7 +337,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--MEM/WB阶段寄存�?????????
+	--MEM/WB阶段寄存�????????
 	component MemWbRegisters
 		port(
 			clk : in std_logic;
@@ -357,7 +356,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--PC加法�????????? 实现PC+1
+	--PC加法�???????? 实现PC+1
 	component PCAdder
 		port( 
 			adderIn : in std_logic_vector(15 downto 0);
@@ -365,7 +364,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--PC选择�????????? 顺序执行or跳转
+	--PC选择�???????? 顺序执行or跳转
 	component PCMux
 		port( branch : in std_logic;
 			branchJudge : in std_logic;
@@ -385,7 +384,7 @@ architecture Behavioral of cpu is
 		);
 	end component;
 	
-	--目的寄存器�?�择�?????????
+	--目的寄存器�?�择�????????
 	component RdMux
 		port(
 			rx : in std_logic_vector(2 downto 0);
@@ -670,7 +669,7 @@ begin
 			PCIn => IdExPC,
 			imm => imm2,
 			
-			dataEx => ExMemAns,
+			dataEx => ExMemData,
 			dataMem => WbData,
 			
 			AsrcOut => AMuxOut
@@ -686,7 +685,7 @@ begin
 			dataB => dataB2,
 			imm => imm2,
 			
-			dataEx => ExMemAns,
+			dataEx => ExMemData,
 			dataMem => WbData,
 			
 			BsrcOut => BMuxOut
@@ -752,7 +751,6 @@ begin
 			memToRegIn => IdExMemToReg,
 			dataSrcIn => IdExDataSrc,
 			
-			wbKeep => ExMemFlush,
 
 			rdOut => ExMemRd,
 			PCOut => ExMemPC,
@@ -827,7 +825,7 @@ begin
 	u18 : IO
 	port map(
 		rst => touch_btn(5),
-		clk 			=> clk_in,
+		clk 			=> touch_btn(4),
 		MemWrite		=> ExMemWrite,
 		MemRead		=> ExMemRead,
 		ram_data		=> ExMemData,
@@ -855,7 +853,7 @@ begin
 	u19 : Clock
 	port map(
 		rst => touch_btn(5),
-		clkIn => clk_in,
+		clkIn => touch_btn(4),
 		clk_2 => clk_2,
 		clk_4 => clk_4,
 		clk_6 => clk
@@ -877,7 +875,7 @@ begin
 	);
 	
 	ext_ram_addr(19 downto 16) <= "0000";
-	leds(15 downto 0) <= wbdata;
+	leds(15 downto 0) <= iodata;
 	--jing <= PCOut;
 	process(PCOut)
 		begin

@@ -19,7 +19,8 @@ entity ExMemRegisters is
 			memWriteIn : in std_logic;
 			memToRegIn : in std_logic;
 			dataSrcIn : in std_logic;
-			
+
+			wbKeep : in std_logic;
 
 			rdOut : out std_logic_vector(3 downto 0);
 			PCOut : out std_logic_vector(15 downto 0);
@@ -57,17 +58,24 @@ begin
 			PCOut <= PCIn;
 			ansOut <= ansIn;
 			branchOut <= branchIn;
-			branchJudgeOut <= branchJudgeIn;
-			jumpOut <= jumpIn;
-			WBOut <= WBIn;
 			memReadOut <= memReadIn;
-			memWriteOut <= memWriteIn;
 			memToRegOut <= memToRegIn;
 			
 			if (dataSrcIn = '1') then
 				dataOut <= dataBIn;
 			else 
 				dataOut <= dataAIn;
+			end if;
+			if (wbkeep = '1' ) then
+				WbOut <= '0';
+				branchJudgeOut <= '0';
+				memWriteOut <= '0';
+				jumpOut <= '0';
+			else 
+				branchJudgeOut <= branchJudgeIn;
+				memWriteOut <= memWriteIn;
+				WBOut <= WBIn;
+				jumpOut <= jumpIn;
 			end if;
 		end if;
 	end process;

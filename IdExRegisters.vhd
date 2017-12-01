@@ -60,7 +60,7 @@ end IdExRegisters;
 
 architecture Behavioral of IdExRegisters is
 begin
-	process(clk, rst)
+	process(clk, rst,IdExFlush)
 	begin		
 		if (rst = '1' or IdExFlush = '1') then
 			PCOut <= (others => '0');
@@ -86,33 +86,58 @@ begin
 			ALUOpOut <= "0000";
 			dataSrcOut <= '0';
 		elsif (clk'event and clk = '1') then
-			PCOut <= PCIn;
-			rdOut <= rdIn;
-			rxOut <= rxIn;
-			ryOut <= ryIn;
-			ASrcOut <= ASrcIn;
-			BSrcOut <= BSrcIn;
-			
-			dataAOut <= dataAIn;
-			dataBOut <= dataBIn;
-			dataTOut <= dataTIn;
-			dataIHOut <= dataIHIn;
-			dataSPOut <= dataSPIn;
-			immOut <= immIn;
-			
-			if (WriteKeep = '1') then 
+			if (IdExFlush = '0') then 
+				PCOut <= PCIn;
+				rdOut <= rdIn;
+				rxOut <= rxIn;
+				ryOut <= ryIn;
+				ASrcOut <= ASrcIn;
+				BSrcOut <= BSrcIn;
+				
+				dataAOut <= dataAIn;
+				dataBOut <= dataBIn;
+				dataTOut <= dataTIn;
+				dataIHOut <= dataIHIn;
+				dataSPOut <= dataSPIn;
+				immOut <= immIn;
+				
+				if (WriteKeep = '1') then 
+					WBOut <= '0';
+					memWriteOut <= '0';
+				else 
+					WBOut <= WBIn;
+					memWriteOut <= memWriteIn;
+				end if;
+				memReadOut <= memReadIn;
+				memToRegOut <= memToRegIn;
+				jumpOut <= jumpIn;
+				branchOut <= branchIn;
+				ALUOpOut <= ALUOpIn;		
+				dataSrcOut <= dataSrcIn;
+			else 
+				PCOut <= (others => '0');
+				rdOut <= (others => '0');
+				rxOut <= (others => '0');
+				ryOut <= (others => '1');
+				ASrcOut <= (others => '0');
+				BSrcOut <= (others => '0');
+				
+				dataAOut <= (others => '0');
+				dataBOut <= (others => '0');
+				dataTOut <= (others => '0');
+				dataIHOut <= (others => '0');
+				dataSPOut <= (others => '0');
+				immOut <= (others => '0');
+				
 				WBOut <= '0';
 				memWriteOut <= '0';
-			else 
-				WBOut <= WBIn;
-				memWriteOut <= memWriteIn;
+				memReadOut <= '0';
+				memToRegOut <= '0';
+				branchout <= '0';
+				jumpOut <= '0';
+				ALUOpOut <= "0000";
+				dataSrcOut <= '0';
 			end if;
-			memReadOut <= memReadIn;
-			memToRegOut <= memToRegIn;
-			jumpOut <= jumpIn;
-			branchOut <= branchIn;
-			ALUOpOut <= ALUOpIn;		
-			dataSrcOut <= dataSrcIn;
 		end if;
 	end process;
 end Behavioral;
