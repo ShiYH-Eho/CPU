@@ -54,28 +54,35 @@ begin
 			memToRegOut <= '0';
 			dataOut <= (others => '0');
 		elsif (clk'event and clk = '1') then
-			rdOut <= rdIn;
-			PCOut <= PCIn;
-			ansOut <= ansIn;
-			branchOut <= branchIn;
-			memReadOut <= memReadIn;
-			memToRegOut <= memToRegIn;
-			
-			if (dataSrcIn = '1') then
-				dataOut <= dataBIn;
-			else 
-				dataOut <= dataAIn;
-			end if;
-			if (wbkeep = '1' ) then
-				WbOut <= '0';
-				branchJudgeOut <= '0';
-				memWriteOut <= '0';
-				jumpOut <= '0';
-			else 
+			if (wbkeep = '0') then
+				rdOut <= rdIn;
+				PCOut <= PCIn;
+				ansOut <= ansIn;
+				branchOut <= branchIn;
+				memReadOut <= memReadIn;
+				memToRegOut <= memToRegIn;
+				
+				if (dataSrcIn = '1') then
+					dataOut <= dataBIn;
+				else 
+					dataOut <= dataAIn;
+				end if;
+				
 				branchJudgeOut <= branchJudgeIn;
 				memWriteOut <= memWriteIn;
 				WBOut <= WBIn;
 				jumpOut <= jumpIn;
+			else
+				rdOut <= (others => '0');
+				PCOut <= (others => '0');
+				ansOut <= (others => '0');
+				branchOut <= '0';
+				branchJudgeOut <= '0';
+				WBOut <= '0';
+				memReadOut <= '0';
+				memWriteOut <= '0';
+				memToRegOut <= '0';
+				dataOut <= (others => '0');
 			end if;
 		end if;
 	end process;

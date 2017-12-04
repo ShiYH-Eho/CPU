@@ -60,7 +60,7 @@ ENTITY LedDebug IS PORT (
     exe_MemRead      : IN  STD_LOGIC;
     exe_MemWE        : IN  STD_LOGIC;
     exe_ALUOp        : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
-    exe_ASrc         : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+    exe_ASrc         : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
     exe_BSrc         : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
     exe_BOp          : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     exe_ASrc4        : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
@@ -156,22 +156,23 @@ BEGIN
 
     infos(16) <= ctrl_ImmeSrc & ctrl_ZeroExt & "00000000" & ctrl_PCMuxSel & ctrl_InDelayslot & hdu_IDEX_Stall;
     infos(17) <= ctrl_ASrc4 & ctrl_ASrc & ctrl_BSrc4 & ctrl_BSrc & ctrl_ALUOp;
-    infos(18) <= rf_Data1;
-    infos(19) <= rf_Data2;
-    infos(20) <= id_data1;
-    infos(21) <= id_data2;
-    infos(22) <= "000000000000000" & ctrl_BranchFlag;
-    infos(23) <= "0000000000000000";
+    infos(18) <= id_data1;
+    infos(19) <= id_data2;    
 
+    infos(20) <= "000000000000000" & ctrl_BranchFlag;
+    infos(21) <= "0000000000000000";
+
+    infos(22) <= rf_Data1;
+    infos(23) <= rf_Data2;
     infos(24) <= exe_Data1;
     infos(25) <= exe_Data2;
     infos(26) <= exe_Imme;
     infos(27) <= exe_MemRead & exe_MemWE & "000000000" & exe_DstReg & exe_RegWE;
     infos(28) <= exe_ASrc4 & exe_ASrc & exe_BSrc4 & exe_BSrc & exe_ALUOp;
     infos(29) <= exe_BOp; -- ALU_B
-    infos(30) <= exe_MemWriteData;
-    infos(31) <= "00000000000000" & exe_PCSel;
+    infos(30) <= "00000000000000" & exe_PCSel;
 
+    infos(31) <= "0000000000000000";
     infos(32) <= alu_F;
     infos(33) <= "00000000" & ram1_en & ram1_oe & ram1_we & '0' & ram2_en & ram2_oe & ram2_we & '0';
     infos(34) <= ram1_data;
@@ -179,8 +180,9 @@ BEGIN
     infos(36) <= ram2_data;
     infos(37) <= ram2_addr;
     infos(38) <= UartOut;
-    infos(39) <= "0000000000000000";
+    
 
+    infos(39) <= exe_MemWriteData;
     infos(40) <= mem_MemRead & mem_MemWE & "000000000" & mem_DstReg & mem_RegWE;
     infos(41) <= mem_ALUOut;
     infos(42) <= mem_MemWriteData;

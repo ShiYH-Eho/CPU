@@ -79,6 +79,8 @@ begin
 				end if;
 				branchJudge <= '1';
 			when others =>
+					ALUresult <= x"0000";
+				branchjudge <= '1';
 		end case;
 	end process;
 
