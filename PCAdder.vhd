@@ -12,7 +12,7 @@ architecture Behavioral of PCAdder is
 
 begin
 
-	process(adderIn)
+	process
 	begin
 		adderOut <= adderIn + 1;
 	end process;

@@ -53,6 +53,7 @@ begin
 			memWriteOut <= '0';
 			memToRegOut <= '0';
 			dataOut <= (others => '0');
+			jumpOut <= '0';
 		elsif (clk'event and clk = '1') then
 			if (wbkeep = '0') then
 				rdOut <= rdIn;
@@ -83,6 +84,7 @@ begin
 				memWriteOut <= '0';
 				memToRegOut <= '0';
 				dataOut <= (others => '0');
+				jumpOut <= '0';
 			end if;
 		end if;
 	end process;
