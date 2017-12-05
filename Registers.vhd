@@ -17,7 +17,9 @@ entity Registers is
 			dataB : out std_logic_vector(15 downto 0);
 			dataT : out std_logic_vector(15 downto 0);
 			dataSP : out std_logic_vector(15 downto 0);
-			dataIH : out std_logic_vector(15 downto 0)
+			dataIH : out std_logic_vector(15 downto 0);
+
+			r0Out, r1Out, r2Out,r3Out,r4Out,r5Out,r6Out,r7Out : out std_logic_vector(15 downto 0)
 	);
 end Registers;
 
@@ -101,6 +103,15 @@ begin
 	dataSP <= SP;
 	dataIH <= IH;
 	dataT <= T;
+
+	r0Out <= r0;
+	r1Out <= r1;
+	r2Out <= r2;
+	r3Out <= r3;
+	r4Out <= r4;
+	r5Out <= r5;
+	r6Out <= r6;
+	r7Out <= r7;
 	
 end Behavioral;
 

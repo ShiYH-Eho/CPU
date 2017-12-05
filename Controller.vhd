@@ -151,6 +151,8 @@ begin
                     ControllerOut <= "10000011111000100000";
                     choose_imm <= "110";
                 when others => --error
+                    ControllerOut <= x"00000";
+                    choose_imm <= "000";
             end case ;
             if (commandIn(15 downto 11) = "11011") then
                 choose_data <= '1';

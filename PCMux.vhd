@@ -14,7 +14,7 @@ end PCMux;
 
 architecture Behavioral of PCMux is
 begin
-	process(branch, branchJudge, PCAdd, PCJump)
+	process(branch, branchJudge, PCAdd, PCJump,jump)
 	begin 
 		if (jump = '1' or (branch = '1' and branchJudge = '1')) then
 			PCNext <= PCJump;

@@ -60,9 +60,9 @@ end IdExRegisters;
 
 architecture Behavioral of IdExRegisters is
 begin
-	process(clk, rst,IdExFlush)
+	process(clk, rst)
 	begin		
-		if (rst = '1' or IdExFlush = '1') then
+		if (rst = '1') then
 			PCOut <= (others => '0');
 			rdOut <= (others => '0');
 			rxOut <= (others => '0');
@@ -101,13 +101,13 @@ begin
 				dataSPOut <= dataSPIn;
 				immOut <= immIn;
 				
-				if (WriteKeep = '1') then 
-					WBOut <= '0';
-					memWriteOut <= '0';
-				else 
+--				if (WriteKeep = '1') then 
+--					WBOut <= '0';
+--					memWriteOut <= '0';
+--				else 
 					WBOut <= WBIn;
 					memWriteOut <= memWriteIn;
-				end if;
+--				end if;
 				memReadOut <= memReadIn;
 				memToRegOut <= memToRegIn;
 				jumpOut <= jumpIn;
