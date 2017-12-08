@@ -41,7 +41,7 @@ begin
 			IdExFlush <= '0';
 			ExMemFlush <= '0';
 		end if;
-			--elsif (clk'event and clk = '1') then
+		--elsif (clk'event and clk = '1') then
 		if (IdExMemRead = '1') then
 			if ((IfIdASrc = "001" or IfIdBSrc = "01") and IdExRd = '0' & IfIdRx) then
 				PCKeep <= '1';
@@ -57,13 +57,13 @@ begin
 				IdExFlush <= '1';
 				WriteKeep <= '1';
 				ExMemFlush <= '0';
-			--elsif ((IdExRd = '0' & IfIdRy or IdExrd = '0' & IfIdRx) and IfIdMemWrite = '1') then
-			--	PCKeep <= '1';
-			--	IfIdKeep <= '1';
-			--	IfIdFlush <= '0';
-			--	IdExFlush <= '1';
-			--	WriteKeep <= '1';
-			--	ExMemFlush <= '0';
+			elsif ((IdExRd = '0' & IfIdRy or IdExrd = '0' & IfIdRx) and IfIdMemWrite = '1') then
+				PCKeep <= '1';
+				IfIdKeep <= '1';
+				IfIdFlush <= '0';
+				IdExFlush <= '1';
+				WriteKeep <= '1';
+				ExMemFlush <= '0';
 			else 
 				PCKeep <= '0';
 				IfIdKeep <= '0';
