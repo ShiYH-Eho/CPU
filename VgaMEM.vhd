@@ -377,9 +377,9 @@ begin
 	end if;
 end process;
 
-process(clk, reset)	-- ÐÐÇø¼äÏñËØÊý (800)
+process(clk, reset)	-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (800)
 begin
-	if reset = '0' then
+	if reset = '1' then
 		vector_x <= (others => '0');
 	elsif clk'event and clk = '1' then
 		if vector_x = 799 then
@@ -390,9 +390,9 @@ begin
 	end if;
 end process;
 
-process(clk, reset)	-- ³¡Çø¼äÐÐÊý (525)
+process(clk, reset)	-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (525)
 begin
-	if reset = '0' then
+	if reset = '1' then
 		vector_y <= (others => '0');
 	elsif clk'event and clk = '1' then
 		if vector_x = 799 then
@@ -405,9 +405,9 @@ begin
 	end if;
 end process;
 
-process(clk, reset) -- ÐÐÍ¬²½ÐÅºÅ£¨640+ÏûÒþÇø£º16¿Õ+96µÍ+48¿Õ£©
+process(clk, reset) -- ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ÅºÅ£ï¿½640+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½16ï¿½ï¿½+96ï¿½ï¿½+48ï¿½Õ£ï¿½
 begin
-	if reset='0' then
+	if reset='1' then
 		hs1 <= '1';
 	elsif clk'event and clk='1' then
 		if vector_x >= 656 and vector_x < 752 then
@@ -418,9 +418,9 @@ begin
 	end if;
 end process;
 
-process(clk, reset) -- ³¡Í¬²½ÐÅºÅ£¨480+ÏûÒþÇø£º10¿Õ+2µÍ+33¿Õ£©
+process(clk, reset) -- ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ÅºÅ£ï¿½480+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½10ï¿½ï¿½+2ï¿½ï¿½+33ï¿½Õ£ï¿½
 begin
-	if reset = '0' then
+	if reset = '1' then
 		vs1 <= '1';
 	elsif clk'event and clk = '1' then
 		if vector_y >= 490 and vector_y < 492 then
@@ -433,7 +433,7 @@ end process;
 
 process(clk, reset)
 begin
-	if reset = '0' then
+	if reset = '1' then
 		video_hsync <= '0';
 		video_vsync <= '0';
 	elsif clk'event and clk = '1' then
@@ -446,7 +446,7 @@ end process;
     process(Reset, Clock, vector_x, vector_y)
     begin
         OnOff <= '1';
-        if Reset = '0' then
+        if reset = '1' then
             OnOff <= '0';
         elsif Clock'event and Clock = '1' then
             if vector_x > 639 or vector_y > 479 then
@@ -729,10 +729,10 @@ end process;
 		end if;
     end process;
 
-process(reset, clk, vector_x, vector_y) -- X, Y ×ø±ê¿ØÖÆ
+process(reset, clk, vector_x, vector_y) -- X, Y ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 begin
     
-	if reset = '0' then
+	if reset = '1' then
 		r0 <= "000";
 		g0 <= "000";
 		b0 <= "00";
@@ -765,7 +765,7 @@ begin
 	end if;
 end process;
 
-process(hs1, vs1, r0, g0, b0) -- ×îµÍµÄÉ«²ÊÊä³ö
+process(hs1, vs1, r0, g0, b0) -- ï¿½ï¿½Íµï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½
 begin
 	if hs1 = '1' and vs1 = '1' then
 	video_pixel(7 downto 5) <= r0;

@@ -14,7 +14,7 @@ entity Clock is
 end Clock;
 
 architecture Behavioral of Clock is
-	signal cnt6,cnt4,cnt2:natural range 0 to 2000;
+	signal cnt6,cnt4,cnt2:natural range 0 to 5000;
 	signal ck6,ck4,ck2 : std_logic := '1';
 begin
 	process (clkIn,rst)
@@ -24,14 +24,14 @@ begin
 			 cnt4 <= 0;
 			 cnt2 <= 0;
 			elsif (clkIn'event and clkIn='1') then
-				if (cnt6 = 1999) then
+				if (cnt6 = 2) then
 					cnt6 <= 0;
 					ck6 <= '1';
 				else
 					cnt6 <= cnt6 + 1;
 					ck6 <= '0';
 				end if;
-				if (cnt4 = 499) then
+				if (cnt4 = 1) then
 					cnt4 <= 0;
 					ck4 <= '1';
 				else

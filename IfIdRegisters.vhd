@@ -36,7 +36,8 @@ begin
 	imm_10_0 <= tmpImm;
 	commandOut <= tmpCommand;
 	PCOut <= tmpPC;
-	process(rst, clk, commandIn, PCIn)
+--	process(rst, clk, commandIn, PCIn)
+	process(rst,clk)
 	begin 
 		if (rst = '1') then
 			tmpRx <= (others => '0');
